@@ -6,9 +6,14 @@
 package View;
 
 import Controller.StackController;
+import Errors.NoPasswordEnteredException;
+import Errors.NoUsernameEnteredException;
+import Errors.UsernameAlreadyExistsException;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -46,6 +51,7 @@ public class RegisterDialog extends javax.swing.JDialog {
                         canEnable = false;
                     }
                 }
+                
                 registerBtn.setEnabled(canEnable);
             }
         };
@@ -237,22 +243,28 @@ public class RegisterDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_backToStartActionPerformed
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
-        registerAction();
+        try {
+            registerAction();
+        } catch (NoPasswordEnteredException | UsernameAlreadyExistsException | NoUsernameEnteredException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
     }//GEN-LAST:event_registerBtnActionPerformed
 
     private void passwFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwFieldKeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            registerAction();
+            try {
+                registerAction();
+            } catch (NoPasswordEnteredException | UsernameAlreadyExistsException | NoUsernameEnteredException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
         }
     }//GEN-LAST:event_passwFieldKeyPressed
 
-    private void registerAction(){
+    private void registerAction() throws NoPasswordEnteredException, UsernameAlreadyExistsException, NoUsernameEnteredException{
         if(stackController.register(usernameField.getText(), passwField.getPassword())){
             successDialog.pack(); // Metodo para que el componente JDialog adopte la "preferedSize" 
             successDialog.setLocationRelativeTo(null);
             successDialog.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(this, "Este nombre de usuario ya existe, intente usar otro");
         }
     }
     

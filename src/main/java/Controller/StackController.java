@@ -21,7 +21,13 @@ public class StackController {
      * @param password contrasena elegida
      * @return true si se agrega correctamente el usuario al stack
      */
-    public boolean register(String username, char[] password){
+    public boolean register(String username, char[] password) throws NoPasswordEnteredException, NoUsernameEnteredException, UsernameAlreadyExistsException{
+        if(password.length==0){
+            throw new NoPasswordEnteredException();
+        }
+        if(username.isEmpty()){
+            throw new NoUsernameEnteredException();
+        }
         if(stack.getUsers().isEmpty()){
             stack.getUsers().add(new User(username, password));
             return true;
@@ -30,7 +36,7 @@ public class StackController {
                 stack.getUsers().add(new User(username, password));  
                 return true;
             }else{
-                return false;
+                throw new UsernameAlreadyExistsException();
             }
         }
     }
@@ -41,7 +47,14 @@ public class StackController {
      * @param password contrasena elegida
      * @return true si se agrega correctamente el usuario al stack
      */
-    public boolean login(String username, char[] password) throws IncorrectPasswException, InexistentUserException{
+    public boolean login(String username, char[] password) throws IncorrectPasswException, InexistentUserException, NoPasswordEnteredException, NoUsernameEnteredException{
+        if(password.length==0){
+            throw new NoPasswordEnteredException();
+        }
+        if(username.isEmpty()){
+            throw new NoUsernameEnteredException();
+        }
+        
         int credentialsChecker = validateCredentials(username, password);
         
         if(credentialsChecker==-1){
@@ -54,6 +67,7 @@ public class StackController {
             return true;
         }
     }
+    
     
     /**
      * Cambia la sesion a false, indicando que no estamos conectados

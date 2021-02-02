@@ -8,6 +8,9 @@ package View;
 import Controller.StackController;
 import Errors.IncorrectPasswException;
 import Errors.InexistentUserException;
+import Errors.NoPasswordEnteredException;
+import Errors.NoUsernameEnteredException;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLayeredPane;
@@ -95,6 +98,11 @@ public class LoginDialog extends javax.swing.JDialog {
         passwField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwFieldActionPerformed(evt);
+            }
+        });
+        passwField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwFieldKeyPressed(evt);
             }
         });
 
@@ -189,29 +197,41 @@ public class LoginDialog extends javax.swing.JDialog {
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         try {
-            stackController.login(usernameField.getText(), passwField.getPassword());
+            loginAction();
+            
+        } catch (IncorrectPasswException | InexistentUserException | NoPasswordEnteredException | NoUsernameEnteredException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_loginBtnActionPerformed
+
+    private void passwFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwFieldKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            try {
+            loginAction();
+            
+            } catch (IncorrectPasswException | InexistentUserException | NoPasswordEnteredException | NoUsernameEnteredException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_passwFieldKeyPressed
+
+    
+    private void loginAction() throws IncorrectPasswException, InexistentUserException, NoPasswordEnteredException, NoUsernameEnteredException{
+        if(stackController.login(usernameField.getText(), passwField.getPassword())){
             JLayeredPane layeredPane = parentFrame.getContainer1();
             JPanel loggedPanel = parentFrame.getLoggedPanel();
             parentFrame.getUsernameDisplay().setText(stackController.getOnlineUsername());
-            
+
             // Actualizamos los paneles 
             layeredPane.removeAll();
             layeredPane.add(loggedPanel);
             layeredPane.repaint();
             layeredPane.revalidate();
-            
+
             // Cerramos la ventana de inicio de sesion
             this.dispose();
-            
-            
-        } catch (IncorrectPasswException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
-        } catch (InexistentUserException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-    }//GEN-LAST:event_loginBtnActionPerformed
-
-
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
     private javax.swing.JPanel jPanel1;
