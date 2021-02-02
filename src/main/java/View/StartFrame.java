@@ -210,14 +210,12 @@ public class StartFrame extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         LoginDialog loginDialog = new LoginDialog(this, true, stackController);
-        loginDialog.setLocationRelativeTo(null);
-        loginDialog.setVisible(true);
+        runJDialog(loginDialog);
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         RegisterDialog registerDialog = new RegisterDialog(this, true, stackController);
-        registerDialog.setLocationRelativeTo(null);
-        registerDialog.setVisible(true);
+        runJDialog(registerDialog);
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void logOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutBtnActionPerformed
@@ -235,10 +233,16 @@ public class StartFrame extends javax.swing.JFrame {
 
     private void makeQuestionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeQuestionBtnActionPerformed
         QuestionForm questionForm = new QuestionForm(this, true, stackController);
-        questionForm.setVisible(true);
+        runJDialog(questionForm);
+        
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
 
 
+    public void runJDialog(javax.swing.JDialog dialog){
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+    
     public void run() {
         setTitle("StackOverflow");
         setLocationRelativeTo(null); // Seteamos la posición del JFrame StartFrame en el centro del monitor

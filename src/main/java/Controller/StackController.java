@@ -6,6 +6,8 @@
 package Controller;
 import Errors.*;
 import Model.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 /**
  *
  * @author Marcelo Guzmán
@@ -66,6 +68,30 @@ public class StackController {
         }    
    }
     
+    
+    /**
+     * Ingresa una nueva pregunta a questions
+     * @param title titulo de la pregunta   
+     * @param content contenido de la pregunta
+     * @param labels lista de etiquetas de la pregunta
+     * @return booleano indicando agregacion valida o no
+     */
+    public boolean ask(String title, String content, ArrayList<Label> labels){
+        if(stack.getCurrentSession().getType()){
+            User currentUser = stack.getCurrentSession().getOnlineUser();
+            String username = currentUser.getUsername();
+            LocalDateTime date = LocalDateTime.now();  
+            
+            Question question = new Question(date, username, title, content); // Creamos la Pregunta
+            stack.getQuestions().add(question);
+            currentUser.makeQuestion(Question.getTotalQuestions());
+            if(labels!=null){
+                question.setLabels(labels);
+            }
+            return true;
+        }
+        return false;
+    }
     
     /**
      * Verifica mediante el nombre de usuario si existe username o no, dentro de ArrayList users

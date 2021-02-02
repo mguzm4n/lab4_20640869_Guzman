@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * Clase Stack que contiene los atributos necesarios para representar un Sistema de
  * Preguntas y Respuestas.
- * @author Marcelo Guzmán
+ * @author Marcelo Guzman
  */
 public class Stack{
     
@@ -16,56 +16,13 @@ public class Stack{
     
     /**
      * Constructor de Stack
-     * Inicializa currentSession, users, questions y labels
+     * Inicializa currentSession, users, questions y labels como ArrayList vacios
      */
     public Stack(){
         this.currentSession = new CurrentSession();
         this.users= new ArrayList<>();
         this.questions = new ArrayList<>();
         this.labels = new ArrayList<>();
-    }
-    
-
-    
-     /**
-     * Anade al usuario al stack para acceder a opciones de usuario online
-     * @param username nombre del usuario
-     * @param password contrasena elegida
-     * @return true si se agrega correctamente el usuario al stack
-     */
-    public boolean login(String username, String password){
-        int validatedUser = validateCredentials(username, password);
-        if(validatedUser!=-1){
-            this.currentSession.setType(true); // sesión online
-            this.currentSession.setOnlineUser(users.get(validatedUser));
-            return true;
-        }
-        return false;
-    }
-    
-
-    
-    /**
-     * Ingresa una nueva pregunta a questions
-     * @param title titulo de la pregunta   
-     * @param content contenido de la pregunta
-     * @param labels lista de etiquetas de la pregunta
-     * @return booleano indicando agregacion valida o no
-     */
-    public boolean ask(String title, String content, ArrayList<Label> labels){
-        User currentUser = this.currentSession.getOnlineUser();
-        if(this.currentSession.getType()){
-            String username = currentUser.getUsername();
-            LocalDateTime date = LocalDateTime.now();  
-            Question question = new Question(date, username, title, content); // Creamos la Pregunta
-            this.questions.add(question);
-            currentUser.makeQuestion(Question.getTotalQuestions());
-            if(labels!=null){
-                question.setLabels(labels);
-            }
-            return true;
-        }
-        return false;
     }
     
     
@@ -361,6 +318,11 @@ public class Stack{
         return users;
     }
     
+    /**
+     * Obteniene los usuarios registrados en el Stack
+     * @param username Usuario que se requiere recuperar desde el stack
+     * @return ArrayList users 
+     */
     public User getUser(String username){
         for(User u : this.users){
             if(u.getUsername().equals(username)){
@@ -375,5 +337,12 @@ public class Stack{
      */
     public ArrayList<Label> getLabels(){
         return labels;
+    }
+    
+    /**
+     * @return Retorna las preguntas hechas en el stack.
+     */
+    public ArrayList<Question> getQuestions(){
+        return questions;
     }
 }

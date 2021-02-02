@@ -20,6 +20,7 @@ public class QuestionForm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.stackController = stackController;
+        
     }
 
     /**
@@ -32,6 +33,9 @@ public class QuestionForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        successDialog = new javax.swing.JDialog();
+        successLbl = new javax.swing.JLabel();
+        backToStartBtn = new javax.swing.JButton();
         formLayeredPane = new javax.swing.JLayeredPane();
         firstFormPanel = new javax.swing.JPanel();
         formTitle1Lbl = new javax.swing.JLabel();
@@ -41,9 +45,47 @@ public class QuestionForm extends javax.swing.JDialog {
         qContentScrollPane = new javax.swing.JScrollPane();
         qContentTxtArea = new javax.swing.JTextArea();
         continueBtn = new javax.swing.JButton();
+        addLabelsCheckBtn = new javax.swing.JRadioButton();
         labelsFormPanel = new javax.swing.JPanel();
         formTitle2Lbl = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
+
+        successDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        successDialog.setTitle("StackOverflow");
+        successDialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+
+        successLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        successLbl.setText("Pregunta registrada con exito");
+
+        backToStartBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        backToStartBtn.setText("Volver");
+        backToStartBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backToStartBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout successDialogLayout = new javax.swing.GroupLayout(successDialog.getContentPane());
+        successDialog.getContentPane().setLayout(successDialogLayout);
+        successDialogLayout.setHorizontalGroup(
+            successDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, successDialogLayout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addComponent(successLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
+            .addGroup(successDialogLayout.createSequentialGroup()
+                .addGap(79, 79, 79)
+                .addComponent(backToStartBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        successDialogLayout.setVerticalGroup(
+            successDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(successDialogLayout.createSequentialGroup()
+                .addComponent(successLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(backToStartBtn)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("StackOverflow");
@@ -77,6 +119,14 @@ public class QuestionForm extends javax.swing.JDialog {
             }
         });
 
+        addLabelsCheckBtn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        addLabelsCheckBtn.setText("Agregar Etiquetas");
+        addLabelsCheckBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addLabelsCheckBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout firstFormPanelLayout = new javax.swing.GroupLayout(firstFormPanel);
         firstFormPanel.setLayout(firstFormPanelLayout);
         firstFormPanelLayout.setHorizontalGroup(
@@ -88,16 +138,19 @@ public class QuestionForm extends javax.swing.JDialog {
                     .addGroup(firstFormPanelLayout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(titleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(questionLbl))
-                        .addGap(20, 20, 20)
-                        .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(qContentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                            .addComponent(titleField)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, firstFormPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(continueBtn)))
-                .addContainerGap())
+                            .addGroup(firstFormPanelLayout.createSequentialGroup()
+                                .addComponent(addLabelsCheckBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                                .addComponent(continueBtn))
+                            .addGroup(firstFormPanelLayout.createSequentialGroup()
+                                .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(titleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(questionLbl))
+                                .addGap(20, 20, 20)
+                                .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(qContentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                                    .addComponent(titleField))))))
+                .addGap(40, 40, 40))
         );
         firstFormPanelLayout.setVerticalGroup(
             firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +166,9 @@ public class QuestionForm extends javax.swing.JDialog {
                     .addComponent(questionLbl)
                     .addComponent(qContentScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(continueBtn)
+                .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(continueBtn)
+                    .addComponent(addLabelsCheckBtn))
                 .addGap(18, 18, 18))
         );
 
@@ -139,7 +194,7 @@ public class QuestionForm extends javax.swing.JDialog {
                 .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(formTitle2Lbl)
                     .addComponent(backBtn))
-                .addContainerGap(224, Short.MAX_VALUE))
+                .addContainerGap(264, Short.MAX_VALUE))
         );
         labelsFormPanelLayout.setVerticalGroup(
             labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,12 +223,32 @@ public class QuestionForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void continueBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueBtnActionPerformed
-        moveToFront(formLayeredPane, labelsFormPanel);
+        if(addLabelsCheckBtn.isSelected()){
+            moveToFront(formLayeredPane, labelsFormPanel);
+            // Agregar interfaz grafica para agregar etiquetas
+        }else{
+            successDialog.pack();
+            successDialog.setLocationRelativeTo(null);
+            stackController.ask(titleField.getText(), qContentTxtArea.getText(), null);
+            
+            // Hacemos visible el mensaje informando que la pregunta se registra correctamente
+            successDialog.setVisible(true);
+        }
     }//GEN-LAST:event_continueBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         moveToFront(formLayeredPane, firstFormPanel);
+        
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void addLabelsCheckBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLabelsCheckBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addLabelsCheckBtnActionPerformed
+
+    private void backToStartBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToStartBtnActionPerformed
+        successDialog.dispose();
+        this.dispose();
+    }//GEN-LAST:event_backToStartBtnActionPerformed
     
     private void moveToFront(javax.swing.JLayeredPane layerPane, javax.swing.JPanel panel){
         layerPane.removeAll();
@@ -181,9 +256,15 @@ public class QuestionForm extends javax.swing.JDialog {
         layerPane.repaint();
         layerPane.revalidate();
     }
+    
+    private void newQuestionAction(){
+        //to do
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton addLabelsCheckBtn;
     private javax.swing.JButton backBtn;
+    private javax.swing.JButton backToStartBtn;
     private javax.swing.JButton continueBtn;
     private javax.swing.JPanel firstFormPanel;
     private javax.swing.JLayeredPane formLayeredPane;
@@ -193,6 +274,8 @@ public class QuestionForm extends javax.swing.JDialog {
     private javax.swing.JScrollPane qContentScrollPane;
     private javax.swing.JTextArea qContentTxtArea;
     private javax.swing.JLabel questionLbl;
+    private javax.swing.JDialog successDialog;
+    private javax.swing.JLabel successLbl;
     private javax.swing.JTextField titleField;
     private javax.swing.JLabel titleLbl;
     // End of variables declaration//GEN-END:variables
