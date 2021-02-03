@@ -7,12 +7,14 @@ package Controller;
 import Errors.*;
 import Model.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 /**
  *
  * @author Marcelo Guzmán
  */
 public class StackController {
+    Question lastQuestion;
     Stack stack = new Stack();
     
     /**
@@ -102,6 +104,7 @@ public class StackController {
             if(labels!=null){
                 question.setLabels(labels);
             }
+            setLastQuestion(question);
             return true;
         }
         return false;
@@ -112,7 +115,7 @@ public class StackController {
      * @param username nombre de usuario
      * @return true cuando se encuentra; en cualquier otro caso retorna false
      */
-    public boolean existsUser(String username){
+    private boolean existsUser(String username){
         int length = stack.getUsers().size(), i;
         for(i=0; i < length; i++) {
             if(stack.getUsers().get(i).getUsername().equals(username)){
@@ -140,6 +143,12 @@ public class StackController {
         return -1;
     }
     
+    private void setLastQuestion(Question q){
+        this.lastQuestion = q;
+    }
+    
+
+    
     private boolean matchesPassword(char[] password0, char[] password1){
         if(password0.length!=password1.length){
             return false;
@@ -156,5 +165,14 @@ public class StackController {
     
     public String getOnlineUsername(){
         return stack.getCurrentSession().getOnlineUsername();
+    }
+    
+    public String setDateFormat(LocalDateTime date, String format){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+        return date.format(formatter);
+    }
+    
+    public Question getLastQuestion(){
+        return this.lastQuestion;
     }
 }

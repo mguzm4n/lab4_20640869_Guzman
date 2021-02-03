@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JWindow;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -54,6 +55,9 @@ public class StartFrame extends javax.swing.JFrame {
         logOutBtn = new javax.swing.JButton();
         reputationMsgLbl = new javax.swing.JLabel();
         makeQuestionBtn = new javax.swing.JButton();
+        container2 = new javax.swing.JLayeredPane();
+        noQuestionsMsgPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         questionsScrollPane = new javax.swing.JScrollPane();
         questionsTable = new javax.swing.JTable();
 
@@ -90,25 +94,25 @@ public class StartFrame extends javax.swing.JFrame {
         logRegisterPanelLayout.setHorizontalGroup(
             logRegisterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logRegisterPanelLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(logRegisterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(welcomeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(22, 22, 22)
+                .addGroup(logRegisterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(welcomeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(logRegisterPanelLayout.createSequentialGroup()
                         .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(359, Short.MAX_VALUE))
+                .addContainerGap(322, Short.MAX_VALUE))
         );
         logRegisterPanelLayout.setVerticalGroup(
             logRegisterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logRegisterPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(19, 19, 19)
                 .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(logRegisterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(registerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(loginButton, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addGroup(logRegisterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(registerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         container1.add(logRegisterPanel, "card3");
@@ -149,11 +153,11 @@ public class StartFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(usernameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(makeQuestionBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addGroup(loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(reputationMsgLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(logOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(90, 90, 90))
+                .addGap(51, 51, 51))
         );
         loggedPanelLayout.setVerticalGroup(
             loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,11 +174,41 @@ public class StartFrame extends javax.swing.JFrame {
                             .addComponent(welcomeMsgLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(makeQuestionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         container1.add(loggedPanel, "card2");
 
+        container2.setLayout(new java.awt.CardLayout());
+
+        noQuestionsMsgPanel.setBackground(new java.awt.Color(204, 204, 204));
+        noQuestionsMsgPanel.setPreferredSize(new java.awt.Dimension(452, 46));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setText("No hay preguntas actualmente");
+
+        javax.swing.GroupLayout noQuestionsMsgPanelLayout = new javax.swing.GroupLayout(noQuestionsMsgPanel);
+        noQuestionsMsgPanel.setLayout(noQuestionsMsgPanelLayout);
+        noQuestionsMsgPanelLayout.setHorizontalGroup(
+            noQuestionsMsgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(noQuestionsMsgPanelLayout.createSequentialGroup()
+                .addGap(121, 121, 121)
+                .addComponent(jLabel1)
+                .addContainerGap(138, Short.MAX_VALUE))
+        );
+        noQuestionsMsgPanelLayout.setVerticalGroup(
+            noQuestionsMsgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(noQuestionsMsgPanelLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1)
+                .addContainerGap(152, Short.MAX_VALUE))
+        );
+
+        container2.add(noQuestionsMsgPanel, "card3");
+
+        questionsScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        questionsTable.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         questionsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -183,8 +217,11 @@ public class StartFrame extends javax.swing.JFrame {
                 "Titulo", "Autor", "Respuestas", "Fecha"
             }
         ));
+        questionsTable.setPreferredSize(new java.awt.Dimension(452, 170));
         questionsTable.getTableHeader().setReorderingAllowed(false);
         questionsScrollPane.setViewportView(questionsTable);
+
+        container2.add(questionsScrollPane, "card2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -192,17 +229,17 @@ public class StartFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(container1)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(questionsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(container2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(container1)
-                .addGap(37, 37, 37)
-                .addComponent(questionsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addComponent(container1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(container2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -237,25 +274,31 @@ public class StartFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
 
-
     public void runJDialog(javax.swing.JDialog dialog){
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
     
     public void run() {
-        setTitle("StackOverflow");
-        setLocationRelativeTo(null); // Seteamos la posición del JFrame StartFrame en el centro del monitor
+       setTitle("StackOverflow");
+        
+        // Editamos el tamano de la font de los headers de la tabla. No se puede hacer desde el editor grafico.
+        questionsTable.getTableHeader().setFont(new java.awt.Font("Tahoma", 0 , 14));
+
+        setLocationRelativeTo(null); // Seteamos la posición del frame StartFrame en el centro del monitor
         setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane container1;
+    private javax.swing.JLayeredPane container2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton logOutBtn;
     private javax.swing.JPanel logRegisterPanel;
     private javax.swing.JPanel loggedPanel;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton makeQuestionBtn;
+    private javax.swing.JPanel noQuestionsMsgPanel;
     private javax.swing.JScrollPane questionsScrollPane;
     private javax.swing.JTable questionsTable;
     private javax.swing.JButton registerButton;
@@ -268,11 +311,23 @@ public class StartFrame extends javax.swing.JFrame {
     public javax.swing.JLayeredPane getContainer1(){
         return container1;
     }
+    public javax.swing.JLayeredPane getContainer2(){
+        return container2;
+    }
     public javax.swing.JPanel getLoggedPanel(){
         return loggedPanel;
     }
     public javax.swing.JLabel getUsernameDisplay(){
         return usernameDisplay;
+    }
+    public javax.swing.JTable getQuestionsTable(){
+        return questionsTable;
+    }
+    public javax.swing.JPanel getNoQuestionsMsgPanel(){
+        return noQuestionsMsgPanel;
+    }
+    public javax.swing.JScrollPane getQuestionsScrollPane(){
+        return questionsScrollPane;
     }
             
 }

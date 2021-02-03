@@ -6,6 +6,8 @@
 package View;
 
 import Controller.StackController;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,12 +15,14 @@ import Controller.StackController;
  */
 public class QuestionForm extends javax.swing.JDialog {
     StackController stackController;
+    StartFrame parent;
     /**
      * Creates new form QuestionForm
      */
     public QuestionForm(java.awt.Frame parent, boolean modal, StackController stackController) {
         super(parent, modal);
         initComponents();
+        this.parent = (StartFrame) parent;
         this.stackController = stackController;
         
     }
@@ -227,10 +231,25 @@ public class QuestionForm extends javax.swing.JDialog {
             moveToFront(formLayeredPane, labelsFormPanel);
             // Agregar interfaz grafica para agregar etiquetas
         }else{
+            DefaultTableModel model = (DefaultTableModel) parent.getQuestionsTable().getModel();
+            
+            if(model.getRowCount()==0){
+                javax.swing.JLayeredPane layeredPane = parent.getContainer2();
+                layeredPane.removeAll();
+                layeredPane.add(parent.getQuestionsScrollPane());
+                layeredPane.repaint();
+                layeredPane.revalidate();
+            }
+            
             successDialog.pack();
             successDialog.setLocationRelativeTo(null);
             stackController.ask(titleField.getText(), qContentTxtArea.getText(), null);
+            Model.Question question = stackController.getLastQuestion();
             
+            String date = stackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy");
+            Object[] newRow = {question.getTitle(), question.getAuthor(), question.getAnswersCount(), date};
+            
+            model.addRow(newRow);
             // Hacemos visible el mensaje informando que la pregunta se registra correctamente
             successDialog.setVisible(true);
         }
@@ -256,11 +275,7 @@ public class QuestionForm extends javax.swing.JDialog {
         layerPane.repaint();
         layerPane.revalidate();
     }
-    
-    private void newQuestionAction(){
-        //to do
-    }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton addLabelsCheckBtn;
     private javax.swing.JButton backBtn;

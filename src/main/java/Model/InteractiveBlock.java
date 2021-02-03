@@ -36,6 +36,14 @@ public abstract class InteractiveBlock {
     }
     
     /**
+     * Recupera la fecha en la cual fue creada la pregunta\respuesta
+     * @return Clase LocalDateTime con la fecha en la que se creo el bloque
+     */
+    public LocalDateTime getPostDate(){
+        return postDate;
+    }
+    
+    /**
      * Recupera el id CORRELATIVO segun el orden en el Sistema visible al Usuario 
      * en el que se muestran las preguntas/respuestas
      * @return int representando al ID
