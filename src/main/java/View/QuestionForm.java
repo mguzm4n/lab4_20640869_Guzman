@@ -40,7 +40,7 @@ public class QuestionForm extends javax.swing.JDialog {
         successDialog = new javax.swing.JDialog();
         successLbl = new javax.swing.JLabel();
         backToStartBtn = new javax.swing.JButton();
-        formLayeredPane = new javax.swing.JLayeredPane();
+        formPanel = new javax.swing.JPanel();
         firstFormPanel = new javax.swing.JPanel();
         formTitle1Lbl = new javax.swing.JLabel();
         titleField = new javax.swing.JTextField();
@@ -94,7 +94,7 @@ public class QuestionForm extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("StackOverflow");
 
-        formLayeredPane.setLayout(new java.awt.CardLayout());
+        formPanel.setLayout(new java.awt.CardLayout());
 
         firstFormPanel.setPreferredSize(new java.awt.Dimension(397, 302));
 
@@ -176,7 +176,7 @@ public class QuestionForm extends javax.swing.JDialog {
                 .addGap(18, 18, 18))
         );
 
-        formLayeredPane.add(firstFormPanel, "card2");
+        formPanel.add(firstFormPanel, "card1");
 
         formTitle2Lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         formTitle2Lbl.setText("Elegir Etiquetas");
@@ -210,17 +210,17 @@ public class QuestionForm extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        formLayeredPane.add(labelsFormPanel, "card3");
+        formPanel.add(labelsFormPanel, "card2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(formLayeredPane)
+            .addComponent(formPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(formLayeredPane, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(formPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -228,36 +228,38 @@ public class QuestionForm extends javax.swing.JDialog {
 
     private void continueBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueBtnActionPerformed
         if(addLabelsCheckBtn.isSelected()){
-            moveToFront(formLayeredPane, labelsFormPanel);
-            // Agregar interfaz grafica para agregar etiquetas
+            java.awt.CardLayout cl = (java.awt.CardLayout) formPanel.getLayout();
+            cl.show(formPanel, "card2");
+            // Escribir interfaz grafica para agregar etiquetas
         }else{
             DefaultTableModel model = (DefaultTableModel) parent.getQuestionsTable().getModel();
             
             if(model.getRowCount()==0){
-                javax.swing.JLayeredPane layeredPane = parent.getContainer2();
-                layeredPane.removeAll();
-                layeredPane.add(parent.getQuestionsScrollPane());
-                layeredPane.repaint();
-                layeredPane.revalidate();
+                javax.swing.JPanel container2 = parent.getContainer2();
+                container2.removeAll();
+                container2.add(parent.getQuestionsScrollPane());
+                container2.repaint();
+                container2.revalidate();
             }
             
-            successDialog.pack();
+            successDialog.pack(); 
             successDialog.setLocationRelativeTo(null);
+            
             stackController.ask(titleField.getText(), qContentTxtArea.getText(), null);
             Model.Question question = stackController.getLastQuestion();
             
             String date = stackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy");
             Object[] newRow = {question.getTitle(), question.getAuthor(), question.getAnswersCount(), date};
-            
             model.addRow(newRow);
+            
             // Hacemos visible el mensaje informando que la pregunta se registra correctamente
             successDialog.setVisible(true);
         }
     }//GEN-LAST:event_continueBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        moveToFront(formLayeredPane, firstFormPanel);
-        
+        java.awt.CardLayout cl = (java.awt.CardLayout) formPanel.getLayout();
+        cl.show(formPanel, "card1");
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void addLabelsCheckBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLabelsCheckBtnActionPerformed
@@ -269,12 +271,12 @@ public class QuestionForm extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_backToStartBtnActionPerformed
     
-    private void moveToFront(javax.swing.JLayeredPane layerPane, javax.swing.JPanel panel){
-        layerPane.removeAll();
-        layerPane.add(panel);
-        layerPane.repaint();
-        layerPane.revalidate();
-    }
+//    private void moveToFront(javax.swing.JLayeredPane layerPane, javax.swing.JPanel panel){
+//        layerPane.removeAll();
+//        layerPane.add(panel);
+//        layerPane.repaint();
+//        layerPane.revalidate();
+//    }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton addLabelsCheckBtn;
@@ -282,7 +284,7 @@ public class QuestionForm extends javax.swing.JDialog {
     private javax.swing.JButton backToStartBtn;
     private javax.swing.JButton continueBtn;
     private javax.swing.JPanel firstFormPanel;
-    private javax.swing.JLayeredPane formLayeredPane;
+    private javax.swing.JPanel formPanel;
     private javax.swing.JLabel formTitle1Lbl;
     private javax.swing.JLabel formTitle2Lbl;
     private javax.swing.JPanel labelsFormPanel;

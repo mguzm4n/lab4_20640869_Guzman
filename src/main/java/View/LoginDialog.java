@@ -216,16 +216,17 @@ public class LoginDialog extends javax.swing.JDialog {
     
     private void loginAction() throws IncorrectPasswException, InexistentUserException, NoPasswordEnteredException, NoUsernameEnteredException{
         if(stackController.login(usernameField.getText(), passwField.getPassword())){
-            JLayeredPane layeredPane = parentFrame.getContainer1();
-            JPanel loggedPanel = parentFrame.getLoggedPanel();
+            JPanel container1 = parentFrame.getContainer1();
+            //JPanel panel = parentFrame.getLoggedPanel();
             parentFrame.getUsernameDisplay().setText(stackController.getOnlineUsername());
 
             // Actualizamos los paneles 
-            layeredPane.removeAll();
-            layeredPane.add(loggedPanel);
-            layeredPane.repaint();
-            layeredPane.revalidate();
-
+            //layeredPane.removeAll();
+            //layeredPane.add(loggedPanel);
+            //layeredPane.repaint();
+            //layeredPane.revalidate();
+            java.awt.CardLayout cl = (java.awt.CardLayout) container1.getLayout();
+            cl.show(container1, "card2"); // card2 es el identificador del panel con opciones de inicio de sesion
             // Cerramos la ventana de inicio de sesion
             this.dispose();
         }
