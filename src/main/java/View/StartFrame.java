@@ -9,12 +9,11 @@ import Controller.StackController;
 import Errors.NoCurrentUserOnlineFoundException;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import javax.swing.JWindow;
-import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class StartFrame extends javax.swing.JFrame {
     StackController stackController;
-    //DefaultTableModel dtm;
+
     /**
      * Creates new form NewJFrame
      * @param stackController
@@ -31,6 +30,14 @@ public class StartFrame extends javax.swing.JFrame {
     public StartFrame(StackController stackController) {
         this.stackController = stackController;
         initComponents();
+        
+        questionsTable.setDefaultEditor(Object.class, null);
+        questionsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void valueChanged(ListSelectionEvent evt) {
+                questionRowSelectedAction(evt);
+            }
+        });
         
       }
 
@@ -277,7 +284,16 @@ public class StartFrame extends javax.swing.JFrame {
         runJDialog(questionForm);
         
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
-
+    
+    private void questionRowSelectedAction(ListSelectionEvent evt){
+        stackController.getQuestion(questionsTable.getSelectedRow());
+        System.out.println(questionsTable.getSelectedRow());
+        
+        
+        //questionsTable.getSelectionModel().clearSelection()
+    }
+    
+    
     public void runJDialog(javax.swing.JDialog dialog){
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
@@ -286,8 +302,8 @@ public class StartFrame extends javax.swing.JFrame {
     public void run() {
        setTitle("StackOverflow");
         
-        // Editamos el tamano de la font de los headers de la tabla. No se puede hacer desde el editor grafico.
-        //questionsTable.getTableHeader().setFont(new java.awt.Font("Tahoma", 0 , 14));
+        // Editamos el tamano de la font de los titulos de la tabla. No se puede hacer desde el editor grafico.
+        questionsTable.getTableHeader().setFont(new java.awt.Font("Tahoma", 0 , 14));
 
         setLocationRelativeTo(null); // Seteamos la posición del frame StartFrame en el centro del monitor
         setVisible(true);

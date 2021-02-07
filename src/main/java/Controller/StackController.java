@@ -163,6 +163,10 @@ public class StackController {
         return true;
     }
     
+    public Question getQuestion(int id){
+        return stack.getQuestions().get(id);
+    }
+    
     public String getOnlineUsername(){
         return stack.getCurrentSession().getOnlineUsername();
     }
