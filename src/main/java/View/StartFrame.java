@@ -8,6 +8,8 @@ package View;
 import Controller.StackController;
 import Errors.NoCurrentUserOnlineFoundException;
 import java.awt.Color;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
@@ -21,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Marcelo Guzmán
  */
 public class StartFrame extends javax.swing.JFrame {
+    boolean isTableSelectionChanging = true; 
     StackController stackController;
 
     /**
@@ -31,11 +34,14 @@ public class StartFrame extends javax.swing.JFrame {
         this.stackController = stackController;
         initComponents();
         
-        questionsTable.setDefaultEditor(Object.class, null);
+        questionsTable.setDefaultEditor(Object.class, null); // deshabilitamos la opcion de editar las filas de la tabla de preguntas
         questionsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent evt) {
-                questionRowSelectedAction(evt);
+                if(isTableSelectionChanging){
+                    questionRowSelectedAction(evt);
+                }
+                
             }
         });
         
@@ -286,13 +292,21 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
     
     private void questionRowSelectedAction(ListSelectionEvent evt){
-        stackController.getQuestion(questionsTable.getSelectedRow());
-        System.out.println(questionsTable.getSelectedRow());
         
+        QuestionView questionView = new QuestionView(this, true, stackController);
+        runJDialog(questionView);
         
-        //questionsTable.getSelectionModel().clearSelection()
+        questionView.addWindowListener(new java.awt.event.WindowAdapter(){
+            
+            @Override
+            public void windowClosed(WindowEvent e) {
+                isTableSelectionChanging = false;
+                StartFrame.this.questionsTable.clearSelection();
+                isTableSelectionChanging = true;
+            }
+
+        });
     }
-    
     
     public void runJDialog(javax.swing.JDialog dialog){
         dialog.setLocationRelativeTo(null);
@@ -302,7 +316,7 @@ public class StartFrame extends javax.swing.JFrame {
     public void run() {
        setTitle("StackOverflow");
         
-        // Editamos el tamano de la font de los titulos de la tabla. No se puede hacer desde el editor grafico.
+        // Editamos el tamano de la font de los titulos de la tabla. 
         questionsTable.getTableHeader().setFont(new java.awt.Font("Tahoma", 0 , 14));
 
         setLocationRelativeTo(null); // Seteamos la posición del frame StartFrame en el centro del monitor
@@ -343,7 +357,6 @@ public class StartFrame extends javax.swing.JFrame {
     public javax.swing.JTable getQuestionsTable(){
         return questionsTable;
     }
-
     public javax.swing.JScrollPane getQuestionsScrollPane(){
         return questionsScrollPane;
     }
