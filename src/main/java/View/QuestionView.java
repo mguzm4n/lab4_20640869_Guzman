@@ -16,10 +16,16 @@ public class QuestionView extends javax.swing.JDialog {
     /**
      * Creates new form QuestionView
      */
-    public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController) {
+    public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController, int questionId) {
         super(parent, modal);
         initComponents();
         this.stackController= stackController;
+        Model.Question question = stackController.getQuestion(questionId);
+        
+        questionTitleLbl.setText(question.getTitle());
+        questionContentText.setText(question.getContent());
+        qAuthorTextLbl.setText(question.getAuthor());
+        postedTextLbl.setText(stackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy"));
     }
 
     /**
@@ -38,6 +44,10 @@ public class QuestionView extends javax.swing.JDialog {
         questionContentText = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         labelsList = new javax.swing.JList<>();
+        postedLbl = new javax.swing.JLabel();
+        qAuthorLbl = new javax.swing.JLabel();
+        qAuthorTextLbl = new javax.swing.JLabel();
+        postedTextLbl = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         backBtn = new javax.swing.JButton();
 
@@ -48,10 +58,12 @@ public class QuestionView extends javax.swing.JDialog {
         questionTitleLbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jScrollPane1.setBorder(null);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         questionContentText.setEditable(false);
         questionContentText.setColumns(20);
         questionContentText.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        questionContentText.setLineWrap(true);
         questionContentText.setRows(5);
         jScrollPane1.setViewportView(questionContentText);
 
@@ -65,6 +77,18 @@ public class QuestionView extends javax.swing.JDialog {
         labelsList.setVisibleRowCount(-1);
         jScrollPane2.setViewportView(labelsList);
 
+        postedLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        postedLbl.setText("Preguntado el");
+
+        qAuthorLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        qAuthorLbl.setText("Autor:");
+
+        qAuthorTextLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        qAuthorTextLbl.setPreferredSize(new java.awt.Dimension(39, 17));
+
+        postedTextLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        postedTextLbl.setPreferredSize(new java.awt.Dimension(39, 17));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -72,25 +96,44 @@ public class QuestionView extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(26, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(postedLbl)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(postedTextLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(qAuthorLbl)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 539, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(qAuthorLbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(postedLbl)
+                    .addComponent(postedTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -156,6 +199,10 @@ public class QuestionView extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> labelsList;
+    private javax.swing.JLabel postedLbl;
+    private javax.swing.JLabel postedTextLbl;
+    private javax.swing.JLabel qAuthorLbl;
+    private javax.swing.JLabel qAuthorTextLbl;
     private javax.swing.JTextArea questionContentText;
     private javax.swing.JLabel questionTitleLbl;
     // End of variables declaration//GEN-END:variables

@@ -293,14 +293,16 @@ public class StartFrame extends javax.swing.JFrame {
     
     private void questionRowSelectedAction(ListSelectionEvent evt){
         
-        QuestionView questionView = new QuestionView(this, true, stackController);
+        QuestionView questionView = new QuestionView(this, true, stackController, questionsTable.getSelectedRow());
         runJDialog(questionView);
+        
+        
         
         questionView.addWindowListener(new java.awt.event.WindowAdapter(){
             
             @Override
             public void windowClosed(WindowEvent e) {
-                isTableSelectionChanging = false;
+                isTableSelectionChanging = false; // booleano en falso para no interferir con metodo valueChanged() de ListSelectionListener
                 StartFrame.this.questionsTable.clearSelection();
                 isTableSelectionChanging = true;
             }
