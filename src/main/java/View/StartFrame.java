@@ -294,7 +294,7 @@ public class StartFrame extends javax.swing.JFrame {
     private void questionRowSelectedAction(ListSelectionEvent evt){
         
         QuestionView questionView = new QuestionView(this, true, stackController, questionsTable.getSelectedRow());
-        runJDialog(questionView);
+        questionView.run();
         
         
         

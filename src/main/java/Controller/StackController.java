@@ -171,6 +171,10 @@ public class StackController {
         return stack.getCurrentSession().getOnlineUsername();
     }
     
+    public boolean getSessionType(){
+        return stack.getCurrentSession().getType();
+    }
+    
     public String setDateFormat(LocalDateTime date, String format){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return date.format(formatter);
