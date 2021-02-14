@@ -163,6 +163,17 @@ public class StackController {
         return true;
     }
     
+    /**
+     * Crea una etiqueta y la agrega a labels
+     * @param name nombre de la etiqueta
+     * @param description descripcion de la etiqueta
+     */
+    public void createLabel(String name, String description){
+        Label label = new Label(name, description);
+        stack.getLabels().add(label);
+    }
+    
+    
     public Question getQuestion(int id){
         return stack.getQuestions().get(id);
     }
@@ -175,12 +186,16 @@ public class StackController {
         return stack.getCurrentSession().getType();
     }
     
-    public String setDateFormat(LocalDateTime date, String format){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-        return date.format(formatter);
+    public ArrayList<Label> getLabels(){
+        return stack.getLabels();
     }
     
     public Question getLastQuestion(){
         return this.lastQuestion;
+    }
+    
+    public String setDateFormat(LocalDateTime date, String format){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+        return date.format(formatter);
     }
 }

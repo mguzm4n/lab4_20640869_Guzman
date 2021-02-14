@@ -274,11 +274,8 @@ public class StartFrame extends javax.swing.JFrame {
         try {
             stackController.logOut();
             java.awt.CardLayout cl = (java.awt.CardLayout) container1.getLayout();
+            JOptionPane.showMessageDialog(this, "Sesion cerrada correctamente.");
             cl.show(container1, "card1"); // card1 es el panel de la vista que una persona sin iniciar sesion observa
-            //container1.removeAll();
-            //container1.add(logRegisterPanel);
-            //container1.repaint();
-            //container1.revalidate();
             
         } catch (NoCurrentUserOnlineFoundException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());

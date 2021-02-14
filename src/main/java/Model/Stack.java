@@ -131,15 +131,7 @@ public class Stack{
         return null;
     }
     
-    /**
-     * Crea una etiqueta y la agrega a labels
-     * @param name nombre de la etiqueta
-     * @param description descripcion de la etiqueta
-     */
-    public void createLabel(String name, String description){
-        Label label = new Label(name, description);
-        labels.add(label);
-    }
+
     
     /**
      * Validar que un usuario realmente se encuentre registrado dentro de users

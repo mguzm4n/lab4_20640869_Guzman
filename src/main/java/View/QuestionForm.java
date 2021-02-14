@@ -6,7 +6,10 @@
 package View;
 
 import Controller.StackController;
+import Model.Label;
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JRadioButton;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -15,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class QuestionForm extends javax.swing.JDialog {
     StackController stackController;
+    boolean labelsDisplayed;
     StartFrame parent;
     /**
      * Creates new form QuestionForm
@@ -22,6 +26,7 @@ public class QuestionForm extends javax.swing.JDialog {
     public QuestionForm(java.awt.Frame parent, boolean modal, StackController stackController) {
         super(parent, modal);
         initComponents();
+        labelsDisplayed = false;
         this.parent = (StartFrame) parent;
         this.stackController = stackController;
         
@@ -53,6 +58,8 @@ public class QuestionForm extends javax.swing.JDialog {
         labelsFormPanel = new javax.swing.JPanel();
         formTitle2Lbl = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        labelsContainer = new javax.swing.JPanel();
 
         successDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         successDialog.setTitle("StackOverflow");
@@ -154,7 +161,7 @@ public class QuestionForm extends javax.swing.JDialog {
                                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(qContentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
                                     .addComponent(titleField))))))
-                .addGap(40, 40, 40))
+                .addGap(18, 18, 18))
         );
         firstFormPanelLayout.setVerticalGroup(
             firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,7 +176,7 @@ public class QuestionForm extends javax.swing.JDialog {
                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(questionLbl)
                     .addComponent(qContentScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(continueBtn)
                     .addComponent(addLabelsCheckBtn))
@@ -189,15 +196,20 @@ public class QuestionForm extends javax.swing.JDialog {
             }
         });
 
+        labelsContainer.setLayout(new java.awt.GridLayout(0, 1));
+        jScrollPane1.setViewportView(labelsContainer);
+
         javax.swing.GroupLayout labelsFormPanelLayout = new javax.swing.GroupLayout(labelsFormPanel);
         labelsFormPanel.setLayout(labelsFormPanelLayout);
         labelsFormPanelLayout.setHorizontalGroup(
             labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(labelsFormPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(formTitle2Lbl)
-                    .addComponent(backBtn))
+                .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(formTitle2Lbl)
+                        .addComponent(backBtn)))
                 .addContainerGap(264, Short.MAX_VALUE))
         );
         labelsFormPanelLayout.setVerticalGroup(
@@ -205,7 +217,9 @@ public class QuestionForm extends javax.swing.JDialog {
             .addGroup(labelsFormPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(formTitle2Lbl)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 232, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1)
+                .addGap(18, 18, 18)
                 .addComponent(backBtn)
                 .addContainerGap())
         );
@@ -228,8 +242,21 @@ public class QuestionForm extends javax.swing.JDialog {
 
     private void continueBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueBtnActionPerformed
         if(addLabelsCheckBtn.isSelected()){
+            
+            
             java.awt.CardLayout cl = (java.awt.CardLayout) formPanel.getLayout();
             cl.show(formPanel, "card2");
+           
+            if(!labelsDisplayed){
+                labelsDisplayed = true;
+                ArrayList<Label> labels = stackController.getLabels();
+                for(Label l : labels){
+                    JRadioButton labelSelectBtn = new JRadioButton(l.getName());
+                    labelSelectBtn.setFont(new java.awt.Font("Tahoma", 0, 14));
+                    labelsContainer.add(labelSelectBtn);
+                }
+                labelsContainer.setVisible(true);
+            }
             // Escribir interfaz grafica para agregar etiquetas
         }else{
             DefaultTableModel model = (DefaultTableModel) parent.getQuestionsTable().getModel();
@@ -287,6 +314,8 @@ public class QuestionForm extends javax.swing.JDialog {
     private javax.swing.JPanel formPanel;
     private javax.swing.JLabel formTitle1Lbl;
     private javax.swing.JLabel formTitle2Lbl;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel labelsContainer;
     private javax.swing.JPanel labelsFormPanel;
     private javax.swing.JScrollPane qContentScrollPane;
     private javax.swing.JTextArea qContentTxtArea;
