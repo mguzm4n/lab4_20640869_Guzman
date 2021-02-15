@@ -86,7 +86,7 @@ public class StackController {
     
     
     /**
-     * Ingresa una nueva pregunta a questions
+     * Ingresa una nueva pregunta al arreglo de preguntas
      * @param title titulo de la pregunta   
      * @param content contenido de la pregunta
      * @param labels lista de etiquetas de la pregunta
@@ -109,6 +109,7 @@ public class StackController {
         }
         return false;
     }
+    
     
     /**
      * Verifica mediante el nombre de usuario si existe username o no, dentro de ArrayList users
@@ -143,11 +144,7 @@ public class StackController {
         return -1;
     }
     
-    private void setLastQuestion(Question q){
-        this.lastQuestion = q;
-    }
     
-
     
     private boolean matchesPassword(char[] password0, char[] password1){
         if(password0.length!=password1.length){
@@ -174,6 +171,20 @@ public class StackController {
     }
     
     
+     /**
+     * Obtener una etiqueta particular desde ArrayList labels
+     * @param labelName string nombre de la etiqueta
+     * @return null si no se encuentra; devuelve la etiqueta si esta existe
+     */
+    public Label getLabel(String labelName){
+        for(Label l : stack.getLabels()){
+            if(l.getName().equals(labelName)){
+                return l;
+            }
+        }
+        return null;
+    }
+    
     public Question getQuestion(int id){
         return stack.getQuestions().get(id);
     }
@@ -197,5 +208,9 @@ public class StackController {
     public String setDateFormat(LocalDateTime date, String format){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return date.format(formatter);
+    }
+    
+    private void setLastQuestion(Question q){
+        this.lastQuestion = q;
     }
 }

@@ -262,21 +262,7 @@ public class Stack{
         return null;
     }
     
-    /**
-     * Obtener una etiqueta particular desde ArrayList labels
-     * @param labelName string nombre de la etiqueta
-     * @return null si no se encuentra; devuelve la etiqueta si esta existe
-     */
-    public Label getLabel(String labelName){
-        Label label;
-        for(int i=0; i<labels.size(); i++){
-            label = labels.get(i);
-            if(label.getName().equals(labelName)){
-                return label;
-            }
-        }
-        return null;
-    }
+
     
     /**
      * Obtener desde ArrayList users un usuario 

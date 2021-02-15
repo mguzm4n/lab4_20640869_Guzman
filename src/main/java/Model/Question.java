@@ -102,8 +102,16 @@ public class Question extends InteractiveBlock {
      * Recupera el ArrayList de respuestas hechas a la pregunta
      * @return ArrayList contenedor de Answer agregadas a la Pregunta
      */
-    public ArrayList getAnswers(){
+    public ArrayList<Answer> getAnswers(){
         return answers;
+    }
+    
+    /**
+     * Recupera las etiquetas que fueron anadidas a la pregunta.
+     * @return ArrayList con las etiquetas o null si es que no posee.
+     */
+    public ArrayList<Label> getLabels(){
+        return labels;
     }
     
     /**
