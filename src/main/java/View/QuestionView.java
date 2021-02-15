@@ -29,7 +29,7 @@ public class QuestionView extends javax.swing.JDialog {
         java.awt.CardLayout cl = (java.awt.CardLayout) labelsPanel.getLayout();
         if(question.getLabels()!=null){
             
-            DefaultListModel listModel = new DefaultListModel();
+            DefaultListModel<String> listModel = new DefaultListModel<>();
             for(Model.Label l : question.getLabels()){
                 listModel.addElement(l.getName());
             }
@@ -40,9 +40,6 @@ public class QuestionView extends javax.swing.JDialog {
             cl.show(labelsPanel, "nolabels");
         }
         
-        if(labelsPanel.isVisible()){
-            System.out.println("yessss");
-        }
         
         questionTitleLbl.setText(question.getTitle());
         questionContentText.setText(question.getContent());

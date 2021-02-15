@@ -9,7 +9,6 @@ import Controller.StackController;
 import Model.Label;
 import java.awt.Component;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import javax.swing.table.DefaultTableModel;
 
