@@ -1,34 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Vista de una pregunta en base a su ID, desde la cual podremos responderla, cerrarla, votarla, etc.
  */
 package View;
 
 import Controller.StackController;
 import javax.swing.DefaultListModel;
 
-/**
- *
- * @author Marcelo Guzmán
- */
+
 public class QuestionView extends javax.swing.JDialog {
     Model.Question question;
     StackController stackController;
     
     /**
      * Creates new form QuestionView
+     * @param parent JFrame padre, en este exclusivo caso se refiere a StartFrame
+     * @param modal Determinar el acceso/ no acceso a elementos de JFrame parent mientras se abre el JDialog
+     * @param stackController Controlador de la logica interna de StackOverflow
+     * @param questionId ID unico de la pregunta que se desea visualizar. 
      */
     public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController, int questionId) {
         super(parent, modal);
         initComponents();
         this.stackController= stackController;
         question = stackController.getQuestion(questionId);
-        
-        
+       
         java.awt.CardLayout cl = (java.awt.CardLayout) labelsPanel.getLayout();
         if(question.getLabels()!=null){
-            
+            // Anadimos las etiquetas al JList
             DefaultListModel<String> listModel = new DefaultListModel<>();
             for(Model.Label l : question.getLabels()){
                 listModel.addElement(l.getName());
@@ -230,11 +228,12 @@ public class QuestionView extends javax.swing.JDialog {
 
     private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerButtonActionPerformed
         AnswerView answerView = new AnswerView(this, true, stackController, question);
+        answerView.run();
     }//GEN-LAST:event_answerButtonActionPerformed
 
 
-    
     public void run(){
+        setLocationRelativeTo(null);
         if(stackController.getSessionType()){
             if(question.getAuthor().equals(stackController.getOnlineUsername())){
                 answerButton.setEnabled(false);

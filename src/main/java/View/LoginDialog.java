@@ -60,7 +60,7 @@ public class LoginDialog extends javax.swing.JDialog {
 
     /**
      * Metodo para inicializar la posicion inicial y construccion de componentes de la ventana LoginDialog.
-     * Este codigo es auto-generado, por lo que no se puede ni debe editar.
+     * Este codigo es auto-generado constantemente segun los cambios de posicion de los componentes de la interfaz, por lo que no se debe editar.
      */
     
     @SuppressWarnings("unchecked")

@@ -9,14 +9,10 @@ import Controller.StackController;
 import Errors.NoCurrentUserOnlineFoundException;
 import java.awt.Color;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -285,14 +281,12 @@ public class StartFrame extends javax.swing.JFrame {
     private void makeQuestionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeQuestionBtnActionPerformed
         QuestionForm questionForm = new QuestionForm(this, true, stackController);
         runJDialog(questionForm);
-        
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
     
     private void questionRowSelectedAction(ListSelectionEvent evt){
         
         QuestionView questionView = new QuestionView(this, true, stackController, questionsTable.getSelectedRow());
         questionView.run();
-        
         
         
         questionView.addWindowListener(new java.awt.event.WindowAdapter(){
