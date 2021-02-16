@@ -4,6 +4,8 @@
 package View;
 
 import Controller.StackController;
+import java.awt.Color;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 
 
@@ -43,6 +45,8 @@ public class QuestionView extends javax.swing.JDialog {
         questionContentText.setText(question.getContent());
         qAuthorTextLbl.setText(question.getAuthor());
         postedTextLbl.setText(stackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy"));
+        
+        fillAnswersPanel(); 
     }
 
     /**
@@ -65,8 +69,9 @@ public class QuestionView extends javax.swing.JDialog {
         qAuthorTextLbl = new javax.swing.JLabel();
         postedTextLbl = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
         answerButton = new javax.swing.JButton();
+        answersScrollPane = new javax.swing.JScrollPane();
+        answersPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("StackOverflow");
@@ -163,7 +168,7 @@ public class QuestionView extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(postedLbl)
                     .addComponent(postedTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         backBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -174,17 +179,6 @@ public class QuestionView extends javax.swing.JDialog {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 201, Short.MAX_VALUE)
-        );
-
         answerButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         answerButton.setText("Responder esta Pregunta");
         answerButton.addActionListener(new java.awt.event.ActionListener() {
@@ -192,6 +186,9 @@ public class QuestionView extends javax.swing.JDialog {
                 answerButtonActionPerformed(evt);
             }
         });
+
+        answersPanel.setLayout(new java.awt.GridLayout(0, 1, 0, 5));
+        answersScrollPane.setViewportView(answersPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,15 +201,18 @@ public class QuestionView extends javax.swing.JDialog {
                 .addGap(128, 128, 128)
                 .addComponent(answerButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(answersScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(answersScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(backBtn)
                     .addComponent(answerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -227,10 +227,25 @@ public class QuestionView extends javax.swing.JDialog {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerButtonActionPerformed
-        AnswerView answerView = new AnswerView(this, true, stackController, question);
+        AnswerForm answerView = new AnswerForm(this, true, stackController, question);
         answerView.run();
     }//GEN-LAST:event_answerButtonActionPerformed
-
+    
+    private void fillAnswersPanel(){
+        for(Model.Answer ans: question.getAnswers()){
+            AnswerView answer = new AnswerView();
+            answer.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
+            answersPanel.add(answer);
+        }
+    }
+    
+    public void addNewAnswer(){
+        AnswerView answer = new AnswerView();
+        answer.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
+        answersPanel.add(answer);
+        answersPanel.revalidate();
+        answersPanel.repaint();
+    }
 
     public void run(){
         setLocationRelativeTo(null);
@@ -248,9 +263,10 @@ public class QuestionView extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton answerButton;
+    private javax.swing.JPanel answersPanel;
+    private javax.swing.JScrollPane answersScrollPane;
     private javax.swing.JButton backBtn;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> labelsList;

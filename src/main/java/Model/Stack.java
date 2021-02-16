@@ -26,26 +26,7 @@ public class Stack{
     }
     
     
-    /**
-     * Anade una nueva respuesta a una pregunta dentro de questions
-     * @param selectedQuestion pregunta que se desea responder
-     * @param content contenido de la respuesta
-     * @return booleano que indica correcta agregacion de respuesta
-     */
-    public boolean answer(Question selectedQuestion, String content){
-        if(selectedQuestion==null){
-            return false;
-        }else if(this.currentSession.getType()){ // getType debe ser True -online-
-            String username = this.currentSession.getOnlineUsername();
-            LocalDateTime date = LocalDateTime.now();
-            Answer answer = new Answer(date, username, content, selectedQuestion.getAnswersCount()+1);
-            selectedQuestion.addAnswer(answer);
-            selectedQuestion.setUpdateDate(date);
-            return true;
-        }else{
-            return false;
-        }
-    }
+
     
     /**
      * Recompensa una pregunta para llamar atencion de usuarios y obtener mejores respuestas

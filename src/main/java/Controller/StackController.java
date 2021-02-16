@@ -110,7 +110,26 @@ public class StackController {
         return false;
     }
     
-    
+    /**
+     * Anade una nueva respuesta a una pregunta dentro de questions
+     * @param selectedQuestion pregunta que se desea responder
+     * @param content contenido de la respuesta
+     * @return booleano que indica correcta agregacion de respuesta
+     */
+    public boolean answer(Question selectedQuestion, String content){
+        if(selectedQuestion==null){
+            return false;
+        }else if(stack.getCurrentSession().getType()){ // getType debe ser True -online-
+            String username = stack.getCurrentSession().getOnlineUsername();
+            LocalDateTime date = LocalDateTime.now();
+            Answer answer = new Answer(date, username, content, selectedQuestion.getAnswersCount()+1);
+            selectedQuestion.addAnswer(answer);
+            selectedQuestion.setUpdateDate(date);
+            return true;
+        }else{
+            return false;
+        }
+    }
     /**
      * Verifica mediante el nombre de usuario si existe username o no, dentro de ArrayList users
      * @param username nombre de usuario
