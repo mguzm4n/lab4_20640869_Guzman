@@ -1,7 +1,6 @@
 package Model;
 import java.util.ArrayList;
 
-import java.time.LocalDateTime;  
 /**
  * Clase Stack que contiene los atributos necesarios para representar un Sistema de
  * Preguntas y Respuestas.
@@ -112,104 +111,6 @@ public class Stack{
         return null;
     }
     
-
-    
-    /**
-     * Validar que un usuario realmente se encuentre registrado dentro de users
-     * @param username nombre de usuario que deseamos validar
-     * @param password contrasena de usuario que deseamos validar
-     * @return cuando se encuentra, retorna la posicion que ocupa dentro del ArrayList; si no, devuelve -1
-     */
-    private int validateCredentials(String username, String password){
-        int length = this.users.size(), i;
-        for (i=0; i < length; i++) {
-            User user = users.get(i);
-            if(user.getUsername().equals(username) && user.getPassword().equals(password)){
-                return i;
-            }
-        }
-        return -1;
-    }
-    
-
-    
-    /**
-     * Da formato de string a las instancias question dentro de questions
-     * @return string equivalente a las Preguntas del Stack
-     */
-    public String questionsToString(){
-        String questionsStr = "", question;
-        for (int i=0; i<Question.getTotalQuestions(); i++){
-            question = this.questions.get(i).toString();
-            questionsStr = questionsStr + "\n\n" + question;
-        }
-        return questionsStr;
-    }
-    
-    /** 
-     * Da formato de string a las Preguntas ABIERTAS dentro del Stack
-     * @return string equivalente a las preguntas que se encuentran abiertas dentro del Stack
-     */
-    public String openQuestionsToString(){
-        String questionsStr = "";
-        Question question;
-        for(int i=0; i<Question.getTotalQuestions(); i++){
-            question = this.questions.get(i);
-            if(question.getState().equals("Abierta")){
-                questionsStr = questionsStr + "\n\n" + question.toString();
-            }
-        }
-        return questionsStr;
-    }
-    
-    /**
-     * Da formato de strings a las Preguntas hechas especificamente por un usuario
-     * @param user usuario del cual queremos obtener las preguntas
-     * @return String equivalente a las Preguntas hechas por el usuario user
-     */
-    public String userQuestionsToString(User user){
-        String questionsStr = "", answersStr;
-        Question question;
-        for(int i=0; i<Question.getTotalQuestions(); i++){
-            question = this.questions.get(i);
-            if(user.getUsername().equals(question.getAuthor())){
-                if(question.getState().equals("Abierta")){ // imprimimos las preguntas abiertas
-                    answersStr = question.answersToString();
-                    questionsStr = questionsStr + "\n\n" + question.toString() + "\n\t[Respuestas: ]\n" + answersStr + "-FIN RESPUESTAS-\n\n";
-                }
-            }
-        }
-        return questionsStr;
-    }
-    
-    /**
-     * Convierte preguntas y respuestas que NO pertenecen al usuario online, para que no se vote a si mismo
-     * @return String equivalente a las P\R que no fueron hechas del usuario
-     */
-    public String blocksToString(){
-        String blocks = "", answers;
-        Question question;
-        for(int i=1; i<=Question.getTotalQuestions(); i++){
-            question = getQuestion(i);
-            User onlineUser = currentSession.getOnlineUser();
-            if(!question.getAuthor().equals(onlineUser.getUsername())){ // Comprobar que no sea el mismo que se vote
-                answers = question.answersNotFromXtoString(onlineUser); // Imprimo solo respuestas que no son del usuario
-                blocks = blocks + question.toString() + "\n\t[Respuestas: ]\n" + answers + "\n\t-FIN RESPUESTAS-\n\n";
-            }
-        }
-        return blocks;
-    }
-    
-    /**
-     * @return String equivalente a las etiquetas registradas en el sistema
-     */
-    public String labelsToString(){
-        String strLabels = "";
-        for(int i=0; i<labels.size(); i++){
-                strLabels += labels.get(i).toString() + "\n\n";
-        }
-        return strLabels;
-    }
     
     /**
      * Convierte el Stack en un string equivalente que muestra la informacion actual
@@ -220,29 +121,15 @@ public class Stack{
         String user = currentSession.getOnlineUser().toString();
         String blocks = "", answers;
         Question question;
-        for(int i = 1; i <= Question.getTotalQuestions(); i++) {
-            question = getQuestion(i);
+        for(int i = 0; i < Question.getTotalQuestions(); i++) {
+            question = questions.get(i);
             answers = question.answersToString();
             blocks += question.toString() + answers +"\n\n"; 
         }
         return user+"\n\n"+blocks;
     }   
     
-    /**
-     * Obtener una pregunta desde ArrayList questions
-     * @param id numero de pregunta que se quiere obtener
-     * @return pregunta con el numero de id deseado
-     */
-    public Question getQuestion(int id){
-        for(int i=0; i<Question.getTotalQuestions(); i++){
-            Question question = this.questions.get(i);
-            if(question.getId()==id){
-                return question;
-            }
-        }
-        return null;
-    }
-    
+
 
     
     /**

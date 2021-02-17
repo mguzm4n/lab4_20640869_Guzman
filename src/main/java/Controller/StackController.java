@@ -64,7 +64,7 @@ public class StackController {
             throw new InexistentUserException();
         }else if(credentialsChecker==2){
             throw new IncorrectPasswException();
-        }else{
+        }else{ 
             stack.getCurrentSession().setType(true); // sesion online
             stack.getCurrentSession().setOnlineUser(stack.getUser(username));
             return true;
@@ -206,8 +206,28 @@ public class StackController {
         return null;
     }
     
+    /**
+     * Recupera una pregunta del ArrayList questions a traves de su posicion en la lista
+     * @param index Indice de la pregunta en el ArrayList. 
+     * @return pregunta en el indice index
+     */
     public Question getQuestion(int index){
         return stack.getQuestions().get(index);
+    }
+    
+    /**
+     * Obtener una pregunta desde ArrayList questions a traves del ID unico de cada pregunta
+     * @param id numero de pregunta que se quiere obtener
+     * @return pregunta que corresponde al id deseado. Retorna null si no  se encuentra.
+     */
+    public Question getQuestionByID(int id){
+        for(int i=0; i<Question.getTotalQuestions(); i++){
+            Question question = this.stack.getQuestions().get(i);
+            if(question.getId()==id){
+                return question;
+            }
+        }
+        return null;
     }
     
     public String getOnlineUsername(){
