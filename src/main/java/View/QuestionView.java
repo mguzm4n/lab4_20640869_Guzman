@@ -7,7 +7,6 @@ import Controller.StackController;
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.table.AbstractTableModel;
 
 
 public class QuestionView extends javax.swing.JDialog {
