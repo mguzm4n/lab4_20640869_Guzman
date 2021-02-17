@@ -19,6 +19,8 @@ import javax.swing.event.ListSelectionListener;
  * @author Marcelo Guzmán
  */
 public class StartFrame extends javax.swing.JFrame {
+    static final int QAUTHOR_COLUMN = 0, QTITLE_COLUMN = 1, QANSWERSCOUNT_COLUMN = 2, QDATE_COLUMN = 3;
+    
     boolean isTableSelectionChanging = true; 
     StackController stackController;
 
@@ -40,6 +42,7 @@ public class StartFrame extends javax.swing.JFrame {
                 
             }
         });
+        
         
       }
 
@@ -271,7 +274,7 @@ public class StartFrame extends javax.swing.JFrame {
             stackController.logOut();
             java.awt.CardLayout cl = (java.awt.CardLayout) container1.getLayout();
             JOptionPane.showMessageDialog(this, "Sesion cerrada correctamente.");
-            cl.show(container1, "card1"); // card1 es el panel de la vista que una persona sin iniciar sesion observa
+            cl.show(container1, "card1"); // card1 es el panel de la vista que un usuario sin iniciar sesion observa
             
         } catch (NoCurrentUserOnlineFoundException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -284,7 +287,6 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
     
     private void questionRowSelectedAction(ListSelectionEvent evt){
-        
         QuestionView questionView = new QuestionView(this, true, stackController, questionsTable.getSelectedRow());
         questionView.run();
         

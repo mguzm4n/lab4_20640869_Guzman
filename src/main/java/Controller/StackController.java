@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 public class StackController {
     Question lastQuestion;
+    Answer lastAnswer;
     Stack stack = new Stack();
     
     /**
@@ -125,6 +126,7 @@ public class StackController {
             Answer answer = new Answer(date, username, content, selectedQuestion.getAnswersCount()+1);
             selectedQuestion.addAnswer(answer);
             selectedQuestion.setUpdateDate(date);
+            setLastAnswer(answer);
             return true;
         }else{
             return false;
@@ -204,8 +206,8 @@ public class StackController {
         return null;
     }
     
-    public Question getQuestion(int id){
-        return stack.getQuestions().get(id);
+    public Question getQuestion(int index){
+        return stack.getQuestions().get(index);
     }
     
     public String getOnlineUsername(){
@@ -223,13 +225,19 @@ public class StackController {
     public Question getLastQuestion(){
         return this.lastQuestion;
     }
+    public Answer getLastAnswer(){
+        return this.lastAnswer;
+    }
     
-    public String setDateFormat(LocalDateTime date, String format){
+    public static String setDateFormat(LocalDateTime date, String format){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return date.format(formatter);
     }
     
     private void setLastQuestion(Question q){
         this.lastQuestion = q;
+    }
+    private void setLastAnswer(Answer a){
+        this.lastAnswer = a;
     }
 }

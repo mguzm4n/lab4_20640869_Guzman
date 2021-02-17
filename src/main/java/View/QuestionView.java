@@ -7,24 +7,27 @@ import Controller.StackController;
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.table.AbstractTableModel;
 
 
 public class QuestionView extends javax.swing.JDialog {
     Model.Question question;
     StackController stackController;
+    StartFrame parent;
     
     /**
      * Creates new form QuestionView
      * @param parent JFrame padre, en este exclusivo caso se refiere a StartFrame
      * @param modal Determinar el acceso/ no acceso a elementos de JFrame parent mientras se abre el JDialog
      * @param stackController Controlador de la logica interna de StackOverflow
-     * @param questionId ID unico de la pregunta que se desea visualizar. 
+     * @param selectedRow Entero que indica cual es la fila seleccionada. Cada fila se corresponde con un id de pregunta (fila+1 == id de Pregunta) 
      */
-    public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController, int questionId) {
+    public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController, int selectedRow) {
         super(parent, modal);
         initComponents();
         this.stackController= stackController;
-        question = stackController.getQuestion(questionId);
+        this.parent = (StartFrame) parent;
+        question = stackController.getQuestion(selectedRow); // Obtenemos la pregunta en dicha fila
        
         java.awt.CardLayout cl = (java.awt.CardLayout) labelsPanel.getLayout();
         if(question.getLabels()!=null){
@@ -44,7 +47,7 @@ public class QuestionView extends javax.swing.JDialog {
         questionTitleLbl.setText(question.getTitle());
         questionContentText.setText(question.getContent());
         qAuthorTextLbl.setText(question.getAuthor());
-        postedTextLbl.setText(stackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy"));
+        postedTextLbl.setText(StackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy"));
         
         fillAnswersPanel(); 
     }
@@ -233,18 +236,22 @@ public class QuestionView extends javax.swing.JDialog {
     
     private void fillAnswersPanel(){
         for(Model.Answer ans: question.getAnswers()){
-            AnswerView answer = new AnswerView();
+            AnswerView answer = new AnswerView(ans);
             answer.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
             answersPanel.add(answer);
         }
     }
     
     public void addNewAnswer(){
-        AnswerView answer = new AnswerView();
-        answer.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
-        answersPanel.add(answer);
+        
+        AnswerView answerView = new AnswerView(stackController.getLastAnswer());
+        answerView.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
+        answersPanel.add(answerView);
         answersPanel.revalidate();
         answersPanel.repaint();
+        
+        // Como las filas se enumeran desde el 0 y los ID comienzan desde el 1 restamos 1 al ID.
+        parent.getQuestionsTable().getModel().setValueAt(question.getAnswersCount(), question.getId() - 1, StartFrame.QANSWERSCOUNT_COLUMN);
     }
 
     public void run(){

@@ -21,6 +21,7 @@ public class QuestionForm extends javax.swing.JDialog {
     ArrayList<Label> labels = new ArrayList<>();
     boolean labelsDisplayed;
     StartFrame parent;
+    
     /**
      * Creates new form QuestionForm
      */
@@ -283,6 +284,7 @@ public class QuestionForm extends javax.swing.JDialog {
                     JRadioButton labelSelectBtn = new JRadioButton(l.getName());
                     labelSelectBtn.setFont(new java.awt.Font("Tahoma", 0, 14));
                     labelSelectBtn.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 labelSelectedActionPerformed(evt, labelSelectBtn);
                             }
@@ -347,7 +349,7 @@ public class QuestionForm extends javax.swing.JDialog {
             
             Model.Question question = stackController.getLastQuestion();
             
-            String date = stackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy");
+            String date = StackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy");
             Object[] newRow = {question.getTitle(), question.getAuthor(), question.getAnswersCount(), date};
             model.addRow(newRow);
             
