@@ -6,6 +6,7 @@
 package View;
 
 import Controller.StackController;
+import java.awt.Insets;
 
 /**
  *
@@ -25,6 +26,7 @@ public class AnswerForm extends javax.swing.JDialog {
         this.parent = (QuestionView) parent;
         this.stackController = stackController;
         this.question = question;
+        answerContentTextArea.setMargin(new Insets(2,5,2,5));
     }
 
     /**

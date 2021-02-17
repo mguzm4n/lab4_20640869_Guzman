@@ -8,6 +8,7 @@ package View;
 import Controller.StackController;
 import Model.Label;
 import java.awt.Component;
+import java.awt.Insets;
 import java.util.ArrayList;
 import javax.swing.JRadioButton;
 import javax.swing.table.DefaultTableModel;
@@ -31,7 +32,7 @@ public class QuestionForm extends javax.swing.JDialog {
         labelsDisplayed = false;
         this.parent = (StartFrame) parent;
         this.stackController = stackController;
-        
+        qContentTxtArea.setMargin(new Insets(2,5,2,5));
     }
 
     /**
@@ -350,7 +351,8 @@ public class QuestionForm extends javax.swing.JDialog {
             Model.Question question = stackController.getLastQuestion();
             
             String date = StackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy");
-            Object[] newRow = {question.getTitle(), question.getAuthor(), question.getAnswersCount(), date};
+            String answersCount = question.getAnswersCount()==0? "Sin respuestas aun" : (Integer.valueOf(question.getAnswersCount())).toString();
+            Object[] newRow = {question.getTitle(), question.getAuthor(), answersCount, date};
             model.addRow(newRow);
             
             // Hacemos visible el mensaje informando que la pregunta se registra correctamente

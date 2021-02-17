@@ -2,6 +2,7 @@ package View;
 
 
 import java.awt.Color;
+import java.awt.Insets;
 import javax.swing.BorderFactory;
 
 /*
@@ -23,7 +24,9 @@ public class AnswerView extends javax.swing.JPanel {
         initComponents();
         authorLbl.setText(ans.getAuthor());
         contentTxtArea.setText(ans.getContent());
+        contentTxtArea.setMargin(new Insets(2,5,2,5));
         dateLbl.setText(Controller.StackController.setDateFormat(ans.getPostDate(), "dd/MM/yyyy"));
+        
     }
 
     /**
