@@ -25,28 +25,6 @@ public class Stack{
     }
     
     
-
-    
-    /**
-     * Recompensa una pregunta para llamar atencion de usuarios y obtener mejores respuestas
-     * @param rewardedQuestion pregunta a ser recompensada
-     * @param amountReward la cantidad dispuesta como recompenas
-     * @return booleano que indica si se logra recompensar o no la pregunta
-     */
-    public boolean reward(Question rewardedQuestion, int amountReward){
-        User onlineUser = this.currentSession.getOnlineUser();
-        int userReputation = onlineUser.getReputation();
-        int calculateError = userReputation - amountReward;
-        if(userReputation<=0){
-            return false;
-        }else if(calculateError<0){
-            return false;
-        }
-        rewardedQuestion.setReward(amountReward);
-        onlineUser.setReputation(-1*amountReward);
-        return true;
-    }
-    
     /**
      * Cambia el estado de una pregunta a Cerrada, si existe algun monto en recompensa se le da al usuario\n
      * al cual le aceptan la respuesta

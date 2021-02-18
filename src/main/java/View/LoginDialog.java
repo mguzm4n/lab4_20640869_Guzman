@@ -32,9 +32,9 @@ public class LoginDialog extends javax.swing.JDialog {
         initComponents();
         this.stackController = stackController;
         parentFrame = (StartFrame) parent; // Debemos hacer un casteo ya que parent viene como Frame
-        loginBtn.setEnabled(false);
-        List<JTextField> list = new ArrayList<>(List.of(passwField, usernameField));
         
+        List<JTextField> list = new ArrayList<>(List.of(passwField, usernameField));
+        loginBtn.setEnabled(false);
         // Controlamos que, a menos que llene los campos el boton de registro no este disponible
         DocumentListener listener = new DocumentListener() {
         @Override
@@ -56,6 +56,7 @@ public class LoginDialog extends javax.swing.JDialog {
         for(JTextField textField : list){
             textField.getDocument().addDocumentListener(listener);
         }
+        this.getRootPane().setDefaultButton(loginBtn);
     }
 
     /**
@@ -89,14 +90,9 @@ public class LoginDialog extends javax.swing.JDialog {
         loginLbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         loginLbl.setText("Iniciar Sesión");
 
-        passwField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                passwFieldKeyPressed(evt);
-            }
-        });
-
         loginBtn.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         loginBtn.setText("Entrar");
+        loginBtn.setEnabled(false);
         loginBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginBtnActionPerformed(evt);
@@ -197,34 +193,17 @@ public class LoginDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_loginBtnActionPerformed
-    /**
-     * Implementa metodo loginAction() que a su vez utiliza el controlador del stack para loggearnos a la aplicacion.
-     * Notar que se en este caso el evento reacciona al presionar enter estando exclusivamente en el campo de la contrasena.
-     * @param evt 
-     */
-    private void passwFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwFieldKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            try {
-            loginAction();
-            
-            } catch (IncorrectPasswException | InexistentUserException | NoPasswordEnteredException | NoUsernameEnteredException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-            }
-        }
-    }//GEN-LAST:event_passwFieldKeyPressed
+    
 
     
+    
+        
     private void loginAction() throws IncorrectPasswException, InexistentUserException, NoPasswordEnteredException, NoUsernameEnteredException{
         if(stackController.login(usernameField.getText(), passwField.getPassword())){
             JPanel container1 = parentFrame.getContainer1();
             //JPanel panel = parentFrame.getLoggedPanel();
             parentFrame.getUsernameDisplay().setText(stackController.getOnlineUsername());
 
-            // Actualizamos los paneles 
-            //layeredPane.removeAll();
-            //layeredPane.add(loggedPanel);
-            //layeredPane.repaint();
-            //layeredPane.revalidate();
             java.awt.CardLayout cl = (java.awt.CardLayout) container1.getLayout();
             cl.show(container1, "card2"); // card2 es el identificador del panel con opciones de inicio de sesion
             // Cerramos la ventana de inicio de sesion

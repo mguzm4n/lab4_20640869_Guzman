@@ -9,7 +9,6 @@ import Controller.StackController;
 import Errors.NoPasswordEnteredException;
 import Errors.NoUsernameEnteredException;
 import Errors.UsernameAlreadyExistsException;
-import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -36,6 +35,7 @@ public class RegisterDialog extends javax.swing.JDialog {
         this.stackController = stackController;
         List<JTextField> list = new ArrayList<>(List.of(passwField, usernameField)); // Crear lista de campos de texto de contrasena y usuario
         
+        registerBtn.setEnabled(false);
         // Controlamos que, a menos que llene los campos el boton de registro no este disponible
         DocumentListener listener = new DocumentListener() {
         @Override
@@ -58,10 +58,13 @@ public class RegisterDialog extends javax.swing.JDialog {
         for(JTextField textField : list){
             textField.getDocument().addDocumentListener(listener);
         }
+        
+        this.getRootPane().setDefaultButton(registerBtn);
+        
     }
 
     /**
-     * Metodo para disponer en la pantalla los componentes del JDialog Register
+     * Metodo para disponer en la pantalla los componentes del JDialog Register y el layout del mismo
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -136,16 +139,6 @@ public class RegisterDialog extends javax.swing.JDialog {
         });
 
         passwField.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        passwField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passwFieldActionPerformed(evt);
-            }
-        });
-        passwField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                passwFieldKeyPressed(evt);
-            }
-        });
 
         usernameLbl.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         usernameLbl.setText("Nombre de Usuario");
@@ -213,10 +206,6 @@ public class RegisterDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void passwFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passwFieldActionPerformed
-
     private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_usernameFieldActionPerformed
@@ -245,16 +234,6 @@ public class RegisterDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_registerBtnActionPerformed
-
-    private void passwFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwFieldKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            try {
-                registerAction();
-            } catch (NoPasswordEnteredException | UsernameAlreadyExistsException | NoUsernameEnteredException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-            }
-        }
-    }//GEN-LAST:event_passwFieldKeyPressed
 
     private void registerAction() throws NoPasswordEnteredException, UsernameAlreadyExistsException, NoUsernameEnteredException{
         if(stackController.register(usernameField.getText(), passwField.getPassword())){

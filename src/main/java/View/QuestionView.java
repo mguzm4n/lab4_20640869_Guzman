@@ -75,8 +75,8 @@ public class QuestionView extends javax.swing.JDialog {
         qAuthorTextLbl = new javax.swing.JLabel();
         postedTextLbl = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        rewardAmountLbl = new javax.swing.JLabel();
+        rewardLbl = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
         optionsPanel = new javax.swing.JPanel();
         answerButton = new javax.swing.JButton();
@@ -140,17 +140,17 @@ public class QuestionView extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Recompensa:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Sin recompensa");
+        rewardAmountLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        rewardAmountLbl.setText("Sin recompensa");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Recompensar");
-        jLabel4.setToolTipText("Agrega una recompensa a esta pregunta");
-        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        rewardLbl.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        rewardLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        rewardLbl.setText("Recompensar");
+        rewardLbl.setToolTipText("Agrega una recompensa a esta pregunta");
+        rewardLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rewardLbl.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
+                rewardLblMouseClicked(evt);
             }
         });
 
@@ -177,9 +177,9 @@ public class QuestionView extends javax.swing.JDialog {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel1)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel2)
+                                    .addComponent(rewardAmountLbl)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel4))
+                                    .addComponent(rewardLbl))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
@@ -207,8 +207,8 @@ public class QuestionView extends javax.swing.JDialog {
                     .addComponent(postedLbl)
                     .addComponent(postedTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4))
+                    .addComponent(rewardAmountLbl)
+                    .addComponent(rewardLbl))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -290,14 +290,14 @@ public class QuestionView extends javax.swing.JDialog {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerButtonActionPerformed
-        AnswerForm answerView = new AnswerForm(this, true, stackController, question);
-        answerView.run();
+        AnswerForm answerForm = new AnswerForm(this, true, stackController, question);
+        answerForm.run();
     }//GEN-LAST:event_answerButtonActionPerformed
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void rewardLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rewardLblMouseClicked
         RewardQuestionForm rewardForm = new RewardQuestionForm(this, true, stackController);
-        rewardForm.run();
-    }//GEN-LAST:event_jLabel4MouseClicked
+        rewardForm.setVisible(true);
+    }//GEN-LAST:event_rewardLblMouseClicked
     
     private void fillAnswersPanel(){
         for(Model.Answer ans: question.getAnswers()){
@@ -341,6 +341,7 @@ public class QuestionView extends javax.swing.JDialog {
             answerButton.setVisible(true);
             clOptions.show(optionsPanel, "answerBtn");
         }else{
+            rewardLbl.setVisible(false);
             answerButton.setVisible(false);
             clOptions.show(optionsPanel, "notLoggedMsg");
         }
@@ -350,6 +351,12 @@ public class QuestionView extends javax.swing.JDialog {
         this.setVisible(true);
     }
 
+    public Model.Question getQuestion(){
+        return question;
+    }
+    public javax.swing.JLabel getRewardAmountLbl(){
+        return rewardAmountLbl;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton answerButton;
     private javax.swing.JPanel answersPanel;
@@ -357,9 +364,7 @@ public class QuestionView extends javax.swing.JDialog {
     private javax.swing.JPanel answersSuperPanel;
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -375,5 +380,7 @@ public class QuestionView extends javax.swing.JDialog {
     private javax.swing.JLabel qAuthorTextLbl;
     private javax.swing.JTextArea questionContentText;
     private javax.swing.JLabel questionTitleLbl;
+    private javax.swing.JLabel rewardAmountLbl;
+    private javax.swing.JLabel rewardLbl;
     // End of variables declaration//GEN-END:variables
 }
