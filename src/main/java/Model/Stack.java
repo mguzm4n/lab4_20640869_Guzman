@@ -26,33 +26,6 @@ public class Stack{
     
     
     /**
-     * Cambia el estado de una pregunta a Cerrada, si existe algun monto en recompensa se le da al usuario\n
-     * al cual le aceptan la respuesta
-     * @param question pregunta de usuario online de donde se obtiene la respuesta
-     * @param answer respuesta especifica aceptada
-     * @return true cuando se acepta correctamente la respuesta, se cierra la pregunta
-     */
-    public boolean accept(Question question, Answer answer){
-        User currentUser = currentSession.getOnlineUser();
-        User rewardedUser = getUserByName(answer.getAuthor());
-        if(currentUser.haveQuestion(question.getId())){
-            question.setState();
-            answer.setState();
-            int reward= question.getReward();
-            if(reward>0){
-                rewardedUser.setReputation(reward+15);
-            }else{
-                rewardedUser.setReputation(15);
-            }
-            currentUser.setReputation(2);
-            
-            return true;
-        }
-        return false;
-        
-    }
-    
-    /**
      * 
      * @param selection Respuesta\Pregunta que se quiere votar 
      * @param voteType booleano, true es voto positivo y false voto negativo

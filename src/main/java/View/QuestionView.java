@@ -7,12 +7,15 @@ import Controller.StackController;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 
 public class QuestionView extends javax.swing.JDialog {
     Model.Question question;
+    Model.Answer acceptedAnswer;
     StackController stackController;
     StartFrame parent;
     
@@ -23,12 +26,12 @@ public class QuestionView extends javax.swing.JDialog {
      * @param stackController Controlador de la logica interna de StackOverflow
      * @param selectedRow Entero que indica cual es la fila seleccionada. Cada fila se corresponde con un id de pregunta (fila+1 == id de Pregunta) 
      */
-    public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController, int selectedRow) {
+    public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController, Model.Question question) {
         super(parent, modal);
         initComponents();
         this.stackController= stackController;
         this.parent = (StartFrame) parent;
-        question = stackController.getQuestion(selectedRow); // Obtenemos la pregunta en dicha fila
+        this.question = question;
        
         questionContentText.setMargin(new Insets(2,5,2,5));
         
@@ -51,7 +54,7 @@ public class QuestionView extends javax.swing.JDialog {
         questionContentText.setText(question.getContent());
         qAuthorTextLbl.setText(question.getAuthor());
         postedTextLbl.setText(StackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy"));
-        
+        rewardAmountLbl.setText(question.getReward()==0? "Sin recompensa" : Integer.toString(question.getReward()));
         fillAnswersPanel(); 
     }
 
@@ -77,6 +80,7 @@ public class QuestionView extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         rewardAmountLbl = new javax.swing.JLabel();
         rewardLbl = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
         optionsPanel = new javax.swing.JPanel();
         answerButton = new javax.swing.JButton();
@@ -154,43 +158,49 @@ public class QuestionView extends javax.swing.JDialog {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setText("Respondida");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(labelsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(qAuthorLbl)
-                                .addGap(12, 12, 12)
-                                .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(postedLbl)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(postedTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(rewardAmountLbl)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(rewardLbl))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(labelsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(qAuthorLbl)
+                        .addGap(12, 12, 12)
+                        .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(postedLbl)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(postedTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(rewardAmountLbl)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(rewardLbl))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGap(11, 11, 11)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -265,7 +275,7 @@ public class QuestionView extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(answersSuperPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
@@ -300,13 +310,44 @@ public class QuestionView extends javax.swing.JDialog {
     }//GEN-LAST:event_rewardLblMouseClicked
     
     private void fillAnswersPanel(){
+        boolean makeBtn = stackController.getSessionType() &&
+                          stackController.getOnlineUsername().equals(question.getAuthor()) && 
+                          question.getState().equals("Abierta");
+
         for(Model.Answer ans: question.getAnswers()){
-            AnswerView answer = new AnswerView(ans);
-            answer.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
-            answersPanel.add(answer);
+            AnswerView answerView = new AnswerView(ans);  
+            if(makeBtn){
+                javax.swing.JLabel acceptLbl = answerView.getAcceptLbl();
+                acceptLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+                acceptLbl.setText("Aceptar Respuesta");
+                acceptLbl.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        QuestionView.this.acceptedAnswer = ans;
+                        acceptLblMouseClicked(evt);
+                    }
+                });
+            }
+            
+            answerView.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
+            answersPanel.add(answerView);
         }
     }
-    
+    private void acceptLblMouseClicked(MouseEvent evt) {
+       int selectedOption = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea aceptar esta pregunta?");
+       if(selectedOption == JOptionPane.YES_OPTION){
+           
+           //javax.swing.JLabel acceptLblBtn = (javax.swing.JLabel) evt.getComponent();
+           //acceptLblBtn.setText("Aceptada");
+           
+           stackController.accept(question, acceptedAnswer);
+           answersPanel.removeAll();
+           fillAnswersPanel();
+           answersPanel.revalidate();
+           answersPanel.repaint();
+           JOptionPane.showMessageDialog(this, "Respuesta Aceptada Correctamente");
+       }
+    }
     public void addNewAnswer(){
         if(question.getAnswersCount()==1){
             CardLayout clAnswers = (CardLayout) answersSuperPanel.getLayout();
@@ -335,10 +376,11 @@ public class QuestionView extends javax.swing.JDialog {
         }
         
         if(stackController.getSessionType()){
-            if(question.getAuthor().equals(stackController.getOnlineUsername())){
+            if(question.getAuthor().equals(stackController.getOnlineUsername()) || question.getState().equals("Cerrada")){
                 answerButton.setEnabled(false);
             }
             answerButton.setVisible(true);
+            
             clOptions.show(optionsPanel, "answerBtn");
         }else{
             rewardLbl.setVisible(false);
@@ -364,6 +406,7 @@ public class QuestionView extends javax.swing.JDialog {
     private javax.swing.JPanel answersSuperPanel;
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

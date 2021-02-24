@@ -7,6 +7,7 @@ package View;
 
 import Controller.StackController;
 import Model.Label;
+import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -336,15 +337,13 @@ public class QuestionForm extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) parent.getQuestionsTable().getModel();
             
             if(model.getRowCount()==0){
-                javax.swing.JPanel container2 = parent.getContainer2();
-                container2.removeAll();
-                container2.add(parent.getQuestionsScrollPane());
-                container2.repaint();
-                container2.revalidate();
+                CardLayout cl = (CardLayout) parent.getContainer2().getLayout();
+                cl.show(parent.getContainer2(), "card3");
             }
             
             stackController.ask(titleField.getText(), qContentTxtArea.getText(), labels.isEmpty()? null : labels);
-            
+            parent.getUserQuestionsBtn().setEnabled(true);
+                    
             successDialog.pack();
             successDialog.setLocationRelativeTo(null);
             

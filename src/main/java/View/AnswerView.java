@@ -1,6 +1,7 @@
 package View;
 
 
+import Controller.StackController;
 import java.awt.Color;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
@@ -17,15 +18,13 @@ import javax.swing.BorderFactory;
  */
 public class AnswerView extends javax.swing.JPanel {
 
-    /**
-     * Creates new form answerView
-     */
     public AnswerView(Model.Answer ans) {
         initComponents();
         authorLbl.setText(ans.getAuthor());
         contentTxtArea.setText(ans.getContent());
         contentTxtArea.setMargin(new Insets(2,5,2,5));
         dateLbl.setText(Controller.StackController.setDateFormat(ans.getPostDate(), "dd/MM/yyyy"));
+        acceptLbl.setText(ans.getState());
         
     }
 
@@ -46,6 +45,7 @@ public class AnswerView extends javax.swing.JPanel {
         votesPanel = new javax.swing.JPanel();
         votesUpBtn = new javax.swing.JButton();
         votesDownBtn = new javax.swing.JButton();
+        acceptLbl = new javax.swing.JLabel();
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -108,6 +108,11 @@ public class AnswerView extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        acceptLbl.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        acceptLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        acceptLbl.setText("No Aceptada");
+        acceptLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -115,16 +120,17 @@ public class AnswerView extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(votesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(dateLbl)
                         .addGap(18, 18, 18)
-                        .addComponent(authorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(0, 0, 0))
+                        .addComponent(authorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(acceptLbl)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,7 +142,8 @@ public class AnswerView extends javax.swing.JPanel {
                         .addGap(11, 11, 11)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dateLbl)
-                            .addComponent(authorLbl)))
+                            .addComponent(authorLbl)
+                            .addComponent(acceptLbl)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(votesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -152,9 +159,12 @@ public class AnswerView extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_votesDownBtnActionPerformed
 
-
+    public javax.swing.JLabel getAcceptLbl(){
+        return acceptLbl;
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel acceptLbl;
     private javax.swing.JLabel authorLbl;
     private javax.swing.JTextArea contentTxtArea;
     private javax.swing.JLabel dateLbl;
@@ -163,4 +173,5 @@ public class AnswerView extends javax.swing.JPanel {
     private javax.swing.JPanel votesPanel;
     private javax.swing.JButton votesUpBtn;
     // End of variables declaration//GEN-END:variables
+
 }

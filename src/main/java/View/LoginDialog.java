@@ -9,10 +9,8 @@ import Errors.IncorrectPasswException;
 import Errors.InexistentUserException;
 import Errors.NoPasswordEnteredException;
 import Errors.NoUsernameEnteredException;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -193,17 +191,17 @@ public class LoginDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_loginBtnActionPerformed
-    
 
-    
-    
         
     private void loginAction() throws IncorrectPasswException, InexistentUserException, NoPasswordEnteredException, NoUsernameEnteredException{
         if(stackController.login(usernameField.getText(), passwField.getPassword())){
             JPanel container1 = parentFrame.getContainer1();
             //JPanel panel = parentFrame.getLoggedPanel();
             parentFrame.getUsernameDisplay().setText(stackController.getOnlineUsername());
-
+            if(stackController.getCurrentSession().getOnlineUser().getQuestions().isEmpty()){
+                parentFrame.getUserQuestionsBtn().setEnabled(false);
+            }
+            parentFrame.getUserQuestionsBtn().setVisible(true);
             java.awt.CardLayout cl = (java.awt.CardLayout) container1.getLayout();
             cl.show(container1, "card2"); // card2 es el identificador del panel con opciones de inicio de sesion
             // Cerramos la ventana de inicio de sesion

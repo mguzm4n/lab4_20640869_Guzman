@@ -153,6 +153,33 @@ public class StackController {
         return true;
     }
     
+        /**
+     * Cambia el estado de una pregunta a Cerrada, si existe algun monto en recompensa se le da al usuario\n
+     * al cual le aceptan la respuesta
+     * @param question pregunta de usuario online de donde se obtiene la respuesta
+     * @param answer respuesta especifica aceptada
+     * @return true cuando se acepta correctamente la respuesta, se cierra la pregunta
+     */
+    public boolean accept(Question question, Answer answer){
+        User currentUser = this.stack.getCurrentSession().getOnlineUser();
+        User rewardedUser = this.stack.getUserByName(answer.getAuthor());
+        if(currentUser.haveQuestion(question.getId())){
+            question.setState();
+            answer.setState();
+            int reward= question.getReward();
+            if(reward>0){
+                rewardedUser.setReputation(reward+15);
+            }else{
+                rewardedUser.setReputation(15);
+            }
+            currentUser.setReputation(2);
+            
+            return true;
+        }
+        return false;
+        
+    }
+    
     /**
      * Verifica mediante el nombre de usuario si existe username o no, dentro de ArrayList users
      * @param username nombre de usuario
@@ -249,6 +276,10 @@ public class StackController {
             }
         }
         return null;
+    }
+    
+    public CurrentSession getCurrentSession(){
+        return stack.getCurrentSession();
     }
     
     public String getOnlineUsername(){

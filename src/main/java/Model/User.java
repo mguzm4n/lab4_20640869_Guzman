@@ -47,7 +47,7 @@ public class User {
      * Recupera la lista de preguntas hechas por el usuario
      * @return ArrayList de Integers representando los id de las preguntas
      */
-    public ArrayList getQuestions(){
+    public ArrayList<Integer> getQuestions(){
         return this.questions;
     }
     
