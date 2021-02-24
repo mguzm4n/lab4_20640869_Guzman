@@ -8,6 +8,7 @@ package View;
 import Controller.StackController;
 import Errors.NoCurrentUserOnlineFoundException;
 import java.awt.Color;
+import java.awt.event.ItemEvent;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
@@ -21,9 +22,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class StartFrame extends javax.swing.JFrame {
     static final int QAUTHOR_COLUMN = 0, QTITLE_COLUMN = 1, QANSWERSCOUNT_COLUMN = 2, QDATE_COLUMN = 3;
-    
+    static final String ALL_QUESTIONS_TABLE = "allQuestionsTable", ONLINE_USER_QUESTIONS = "onlineUserQuestions";
 
-    boolean isRowSelectable = true; 
+    boolean firstCreated = true; 
     StackController stackController;
 
     /**
@@ -34,17 +35,14 @@ public class StartFrame extends javax.swing.JFrame {
         this.stackController = stackController;
         initComponents();
         
-        questionsTable.setDefaultEditor(Object.class, null); // deshabilitamos la opcion de editar las filas de la tabla de preguntas
-        questionsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                if(isRowSelectable){
-                    questionRowSelectedAction(evt);
-                }
-                
-            }
-        });
+        questionsScrollPane.setName(ALL_QUESTIONS_TABLE);
+        userQuestionsScrollPane.setName(ONLINE_USER_QUESTIONS);
         
+        questionsTable.setDefaultEditor(Object.class, null); // deshabilitamos la opcion de editar las filas de la tabla de preguntas
+        userQuestionsTable.setDefaultEditor(Object.class, null);
+    
+        questionsTable.addMouseListener(new QuestionSelectionAction(questionsTable, stackController, this));
+        userQuestionsTable.addMouseListener(new QuestionSelectionAction(userQuestionsTable, stackController, this));
         
       }
 
@@ -235,7 +233,7 @@ public class StartFrame extends javax.swing.JFrame {
         questionsTable.getTableHeader().setReorderingAllowed(false);
         questionsScrollPane.setViewportView(questionsTable);
 
-        container2.add(questionsScrollPane, "card3");
+        container2.add(questionsScrollPane, "allQuestionsTable");
 
         userQuestionsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -245,9 +243,10 @@ public class StartFrame extends javax.swing.JFrame {
                 "Titulo de Pregunta", "Respuestas", "Fecha"
             }
         ));
+        userQuestionsTable.getTableHeader().setReorderingAllowed(false);
         userQuestionsScrollPane.setViewportView(userQuestionsTable);
 
-        container2.add(userQuestionsScrollPane, "card4");
+        container2.add(userQuestionsScrollPane, "onlineUserQuestions");
 
         userQuestionsBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         userQuestionsBtn.setText("Ver mis Preguntas");
@@ -305,7 +304,7 @@ public class StartFrame extends javax.swing.JFrame {
             java.awt.CardLayout clContainer1 = (java.awt.CardLayout) container1.getLayout(), clContainer2 = (java.awt.CardLayout) container2.getLayout();
             JOptionPane.showMessageDialog(this, "Sesion cerrada correctamente.");
             clContainer1.show(container1, "card1"); // card1 es el panel de la vista que un usuario sin iniciar sesion observa
-            clContainer2.show(container2, "card3");
+            clContainer2.show(container2, ALL_QUESTIONS_TABLE);
             userQuestionsBtn.setVisible(false);
             userQuestionsBtn.setSelected(false);
         } catch (NoCurrentUserOnlineFoundException ex) {
@@ -321,8 +320,7 @@ public class StartFrame extends javax.swing.JFrame {
     private void userQuestionsBtnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_userQuestionsBtnItemStateChanged
         java.awt.CardLayout cl = (java.awt.CardLayout) container2.getLayout();
         int estado = evt.getStateChange();
-        if(estado==evt.SELECTED){
-            
+        if(estado==ItemEvent.SELECTED){
             makeQuestionBtn.setEnabled(false);
             userQuestionsBtn.setText("Mostrar todas las Preguntas");
             Model.Question question;
@@ -336,35 +334,19 @@ public class StartFrame extends javax.swing.JFrame {
                 String answersCount = question.getAnswersCount()==0? "Sin respuestas aun" : (Integer.valueOf(question.getAnswersCount())).toString();
                 Object[] newRow = {question.getTitle(), answersCount, date};
                 model.addRow(newRow);
-                System.out.println("se agrega la pregunta "+ i);
             }
-            cl.show(container2,"card4");
+            
+            
+            cl.show(container2, ONLINE_USER_QUESTIONS);
         }else{
             makeQuestionBtn.setEnabled(true);
             userQuestionsBtn.setText("Ver mis Preguntas");
            
-            cl.show(container2,"card3");
+            cl.show(container2, ALL_QUESTIONS_TABLE);
             
         }
     }//GEN-LAST:event_userQuestionsBtnItemStateChanged
-    
-    private void questionRowSelectedAction(ListSelectionEvent evt){
-        QuestionView questionView = new QuestionView(this, true, stackController, stackController.getQuestion(questionsTable.getSelectedRow()));
-        questionView.run();
-        
-        
-        questionView.addWindowListener(new java.awt.event.WindowAdapter(){
-            
-            @Override
-            public void windowClosed(WindowEvent e) {
-                isRowSelectable = false; // booleano en falso para no interferir con metodo valueChanged() de ListSelectionListener
-                StartFrame.this.questionsTable.clearSelection();
-                isRowSelectable = true;
-            }
 
-        });
-    }
-    
     public void runJDialog(javax.swing.JDialog dialog){
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);

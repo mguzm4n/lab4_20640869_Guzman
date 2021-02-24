@@ -338,7 +338,7 @@ public class QuestionForm extends javax.swing.JDialog {
             
             if(model.getRowCount()==0){
                 CardLayout cl = (CardLayout) parent.getContainer2().getLayout();
-                cl.show(parent.getContainer2(), "card3");
+                cl.show(parent.getContainer2(), StartFrame.ALL_QUESTIONS_TABLE);
             }
             
             stackController.ask(titleField.getText(), qContentTxtArea.getText(), labels.isEmpty()? null : labels);

@@ -29,7 +29,7 @@ public class LoginDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.stackController = stackController;
-        parentFrame = (StartFrame) parent; // Debemos hacer un casteo ya que parent viene como Frame
+        parentFrame = (StartFrame) parent; 
         
         List<JTextField> list = new ArrayList<>(List.of(passwField, usernameField));
         loginBtn.setEnabled(false);
