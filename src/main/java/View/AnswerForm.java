@@ -7,6 +7,9 @@ package View;
 
 import Controller.StackController;
 import java.awt.Insets;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -93,7 +96,11 @@ public class AnswerForm extends javax.swing.JDialog {
 
     private void sendAnswerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendAnswerBtnActionPerformed
         stackController.answer(question, answerContentTextArea.getText());
-        parent.addNewAnswer();
+        try {
+            parent.addNewAnswer();
+        } catch (IOException ex) {
+            Logger.getLogger(AnswerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.dispose();
     }//GEN-LAST:event_sendAnswerBtnActionPerformed
 

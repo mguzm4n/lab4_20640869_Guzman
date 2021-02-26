@@ -9,7 +9,10 @@ import Controller.StackController;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -51,8 +54,13 @@ public class QuestionSelectionAction extends MouseAdapter{
         }
         
         System.out.println("\n");
-        QuestionView questionView =new QuestionView(parent, true, stackController, 
-                                                    stackController.getQuestionByID(selectedQuestion));
+        QuestionView questionView = null;
+        try {
+            questionView = new QuestionView(parent, true, stackController, 
+                    stackController.getQuestionByID(selectedQuestion));
+        } catch (IOException ex) {
+            Logger.getLogger(QuestionSelectionAction.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
         questionView.addWindowListener(new java.awt.event.WindowAdapter(){
