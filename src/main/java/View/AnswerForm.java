@@ -27,6 +27,7 @@ public class AnswerForm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.parent = (QuestionView) parent;
+        
         this.stackController = stackController;
         this.question = question;
         answerContentTextArea.setMargin(new Insets(2,5,2,5));

@@ -6,6 +6,12 @@
 package View;
 
 import Controller.StackController;
+import Errors.InsufficientReputationException;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -16,6 +22,7 @@ import javax.swing.JOptionPane;
 public class RewardQuestionForm extends javax.swing.JDialog {
     StackController stackController;
     QuestionView parent;
+    boolean firstFocused = true;
     /**
      * Creates new form RewardQuestionForm
      */
@@ -24,6 +31,21 @@ public class RewardQuestionForm extends javax.swing.JDialog {
         initComponents();
         this.parent = (QuestionView) parent;
         this.stackController = stackController;
+        setLocationRelativeTo(null);
+        
+        
+        rewardAmountTxtField.addFocusListener(new FocusAdapter(){
+            @Override
+            public void focusGained(FocusEvent e){
+                if(firstFocused){
+                    rewardAmountTxtField.setText("");
+                    firstFocused = false;
+                }
+            }
+
+        });
+        // Actualizamos la recompensa hasta el momento
+        actualRewardLbl.setText(Integer.toString(this.parent.getQuestion().getReward()));
     }
 
     /**
@@ -134,8 +156,16 @@ public class RewardQuestionForm extends javax.swing.JDialog {
         
         try{
             rewardAmount = Integer.parseInt(rewardAmountTxtField.getText());
-            stackController.reward(parent.getQuestion(), rewardAmount);
-            parent.getRewardAmountLbl().setText(Integer.toString(parent.getQuestion().getReward()));
+            try {
+                stackController.reward(parent.getQuestion(), rewardAmount);
+                
+                // Actualizar recompensas en vista principal y vista de la pregunta
+                parent.getRewardAmountLbl().setText(Integer.toString(parent.getQuestion().getReward()));
+                parent.getParent().getRewardLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
+            } catch (InsufficientReputationException ex) {
+                JOptionPane.showMessageDialog(parent, ex.getMessage());
+            }
+            
         }catch(NumberFormatException e){
             JOptionPane.showMessageDialog(this, "Debe ingresar un numero valido, por favor.");
         }

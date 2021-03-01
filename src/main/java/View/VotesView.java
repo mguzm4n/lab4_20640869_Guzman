@@ -1,51 +1,169 @@
 package View;
 
+import Controller.StackController;
 import java.awt.Image;
-import java.io.File;
+import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JToggleButton;
+import Model.InteractiveBlock;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
 
 
 public class VotesView extends javax.swing.JPanel {
-
+    private QuestionView parent;
+    private StackController stackController;
+    private InteractiveBlock interactiveBlock;
+    private JToggleButton voteUpBtn, voteDownBtn;
+    private JLabel totalVotesLbl;
+    private Boolean hasVoted;
     /**
      * Creates new form VotesView
      */
-    public VotesView() throws IOException{
+    public VotesView(QuestionView parent, InteractiveBlock interactiveBlock) throws IOException{
+        this.stackController = parent.getStackController();
+        this.parent = parent;
+        this.interactiveBlock = interactiveBlock;
         setLayout(new java.awt.GridLayout(3, 1, 0, 2));
+        voteUpBtn = new JToggleButton();
+        voteDownBtn = new JToggleButton();
         
-        Image image1, image2;
-        JButton button1 = new JButton(), button2 = new JButton();
-        ArrayList<JButton> btnlist = new ArrayList<>();
-        btnlist.add(button1); btnlist.add(button2);
-        JLabel votesLabel = new JLabel("0", JLabel.CENTER);
+        Image imageIcon1, imageIcon2, imageSelected1, imageSelected2;
         
-        for(JButton btn : btnlist){
-            btn.setSize(25, 20);
+        ArrayList<JToggleButton> btnlist = new ArrayList<>();
+        btnlist.add(voteUpBtn); btnlist.add(voteDownBtn);
+        totalVotesLbl = new JLabel("0", JLabel.CENTER);
+        
+        for(JToggleButton btn : btnlist){
             btn.setBorderPainted(false);
             btn.setContentAreaFilled(false);
         }
         
         
         try {
-            image1 = ImageIO.read(getClass().getResource("/up-arrow.png"));
-            image2 = ImageIO.read(getClass().getResource("/down-arrow.png"));
+            
+            imageIcon1 = ImageIO.read(getClass().getResource("/up-arrow-medium.png"));
+            imageIcon2 = ImageIO.read(getClass().getResource("/down-arrow-medium.png"));
+            
+            imageSelected1 = ImageIO.read(getClass().getResource("/up-arrow-medium-selected.png"));
+            imageSelected2 = ImageIO.read(getClass().getResource("/down-arrow-medium-selected.png"));
 
-            button1.setIcon(new ImageIcon(image1.getScaledInstance(button1.getWidth(), button1.getHeight(), Image.SCALE_SMOOTH)));
-            button2.setIcon(new ImageIcon(image2.getScaledInstance(button1.getWidth(), button1.getHeight(), Image.SCALE_SMOOTH)));
+            voteUpBtn.setIcon(new ImageIcon(imageIcon1.getScaledInstance(27, 27, Image.SCALE_SMOOTH)));
+            voteDownBtn.setIcon(new ImageIcon(imageIcon2.getScaledInstance(27, 27, Image.SCALE_SMOOTH)));
+            
+            voteUpBtn.setSelectedIcon(new ImageIcon(imageSelected1.getScaledInstance(27, 27, Image.SCALE_SMOOTH)));
+            voteDownBtn.setSelectedIcon(new ImageIcon(imageSelected2.getScaledInstance(27, 27, Image.SCALE_SMOOTH)));
+            
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
         
         
-        add(button1);
-        add(votesLabel);
-        add(button2);
+        hasVoted = false;
+        
+        initVotes();
+        if(stackController.getSessionType()){
+            
+            voteUpBtn.addItemListener(new java.awt.event.ItemListener() {
+                @Override
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    voteUpButtonClicked(evt);
+                }
+            });
+
+            voteDownBtn.addItemListener(new java.awt.event.ItemListener() {
+                @Override
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    voteDownButtonClicked(evt);
+                }
+            });
+        }else{
+            for(JToggleButton btn : btnlist){
+                btn.setSelected(false);
+               
+                btn.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "Usuarios sin sesión iniciada no pueden emitir votos");
+                    }
+                });
+            }
+        }
+        
+        
+        add(voteUpBtn);
+        add(totalVotesLbl);
+        add(voteDownBtn);
         
     }
+    
+    private void initVotes(){
+        
+        Integer totalVotes = interactiveBlock.getVotes().getTotalVotes();
+        
+        if(stackController.getSessionType()){
+        
+        String user = stackController.getOnlineUsername();
+        HashMap<String, Boolean> submittedVotes = interactiveBlock.getSubmittedVotes();
+        hasVoted = submittedVotes.containsKey(user);
+        if(hasVoted){
+            Boolean voteType = submittedVotes.get(user);
+            if(voteType){
+                voteUpBtn.setSelected(true);
+            }else{
+                voteDownBtn.setSelected(true);
+            }
+        }
+        }
+        
+        totalVotesLbl.setText(totalVotes.toString());
+        
+        
+    }
+    
+    private void voteUpButtonClicked(ItemEvent evt){
+       
+        if(evt.getStateChange()==ItemEvent.DESELECTED){
+            stackController.undoVoteUp(interactiveBlock);
+            
+        }else{
+            if(voteDownBtn.isSelected()){
+                voteDownBtn.setSelected(false);
+            }
+            stackController.submitVoteUp(interactiveBlock);
+        }
+        Integer totalVotes = interactiveBlock.getVotes().getTotalVotes();
+        totalVotesLbl.setText(totalVotes.toString());
+        parent.getParent().getRewardLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
+    }
+    
+    private void voteDownButtonClicked(ItemEvent evt){
+        
+        if(evt.getStateChange()==ItemEvent.DESELECTED){
+            stackController.undoVoteDown(interactiveBlock);
+        }else{
+            if(voteUpBtn.isSelected()){
+                voteUpBtn.setSelected(false);
+            }
+            stackController.submitVoteDown(interactiveBlock);
+        }
+        Integer totalVotes = interactiveBlock.getVotes().getTotalVotes();
+        totalVotesLbl.setText(totalVotes.toString());
+    }
+    
+    public JToggleButton getVoteUpBtn(){
+        return voteUpBtn;
+    }
+    
+    public JToggleButton getVoteDownBtn(){
+        return voteDownBtn;
+    }
+
                 
 }

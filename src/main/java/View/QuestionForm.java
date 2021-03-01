@@ -6,11 +6,15 @@
 package View;
 
 import Controller.StackController;
+import Errors.FieldEmptyException;
 import Model.Label;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.table.DefaultTableModel;
 
@@ -317,7 +321,7 @@ public class QuestionForm extends javax.swing.JDialog {
        
     
     private void postBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postBtnActionPerformed
-
+        
         for(Component c : labelsContainer.getComponents()){
             JRadioButton labelBtn = (JRadioButton) c;
             if(labelBtn.isSelected()){
@@ -325,7 +329,12 @@ public class QuestionForm extends javax.swing.JDialog {
             }
         }
         
-        makeQuestion();
+        if(labels.isEmpty()){
+            JOptionPane.showMessageDialog(parent, "Debe seleccionar al menos una etiqueta!");
+            
+        }else{
+            makeQuestion();
+        }
     }//GEN-LAST:event_postBtnActionPerformed
     
     private void labelSelectedActionPerformed(java.awt.event.ActionEvent evt, javax.swing.JRadioButton labelCheckButton){
@@ -336,26 +345,33 @@ public class QuestionForm extends javax.swing.JDialog {
         
         DefaultTableModel model = (DefaultTableModel) parent.getQuestionsTable().getModel();
             
-            if(model.getRowCount()==0){
-                CardLayout cl = (CardLayout) parent.getContainer2().getLayout();
-                cl.show(parent.getContainer2(), StartFrame.ALL_QUESTIONS_TABLE);
-            }
+         if(model.getRowCount()==0){
+             CardLayout cl = (CardLayout) parent.getContainer2().getLayout();
+             cl.show(parent.getContainer2(), StartFrame.ALL_QUESTIONS_TABLE);
+         }
             
+        try {
             stackController.ask(titleField.getText(), qContentTxtArea.getText(), labels.isEmpty()? null : labels);
             parent.getUserQuestionsBtn().setEnabled(true);
-                    
+                
             successDialog.pack();
             successDialog.setLocationRelativeTo(null);
-            
+
             Model.Question question = stackController.getLastQuestion();
-            
+
             String date = StackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy");
             String answersCount = question.getAnswersCount()==0? "Sin respuestas aun" : (Integer.valueOf(question.getAnswersCount())).toString();
             Object[] newRow = {question.getTitle(), question.getAuthor(), answersCount, date};
             model.addRow(newRow);
-            
+
             // Hacemos visible el mensaje informando que la pregunta se registra correctamente
             successDialog.setVisible(true);
+        } catch (FieldEmptyException ex) {
+            JOptionPane.showMessageDialog(parent, ex.getMessage());
+            labels.clear();
+            
+        }
+        
     }
     
 

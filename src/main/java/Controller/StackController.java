@@ -9,6 +9,7 @@ import Model.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 /**
  *
  * @author Marcelo Guzmán
@@ -24,7 +25,8 @@ public class StackController {
      * @param password contrasena elegida
      * @return true si se agrega correctamente el usuario al stack
      */
-    public boolean register(String username, char[] password) throws NoPasswordEnteredException, NoUsernameEnteredException, UsernameAlreadyExistsException{
+    public boolean register(String username, char[] password) throws NoPasswordEnteredException, NoUsernameEnteredException, 
+                                                                     UsernameAlreadyExistsException{
         if(password.length==0){
             throw new NoPasswordEnteredException();
         }
@@ -50,7 +52,8 @@ public class StackController {
      * @param password contrasena elegida
      * @return true si se agrega correctamente el usuario al stack
      */
-    public boolean login(String username, char[] password) throws IncorrectPasswException, InexistentUserException, NoPasswordEnteredException, NoUsernameEnteredException{
+    public boolean login(String username, char[] password) throws IncorrectPasswException, InexistentUserException, 
+                                                                  NoPasswordEnteredException, NoUsernameEnteredException{
         if(password.length==0){
             throw new NoPasswordEnteredException();
         }
@@ -66,7 +69,7 @@ public class StackController {
             throw new IncorrectPasswException();
         }else{ 
             stack.getCurrentSession().setType(true); // sesion online
-            stack.getCurrentSession().setOnlineUser(stack.getUser(username));
+            stack.getCurrentSession().setOnlineUser(getUser(username));
             return true;
         }
     }
@@ -93,15 +96,23 @@ public class StackController {
      * @param labels lista de etiquetas de la pregunta
      * @return booleano indicando agregacion valida o no
      */
-    public boolean ask(String title, String content, ArrayList<Label> labels){
+    public boolean ask(String title, String content, ArrayList<Label> labels) throws FieldEmptyException{
+        
+        if(title.isEmpty() || content.isEmpty()){
+            throw new FieldEmptyException();
+        }
+        
         if(stack.getCurrentSession().getType()){
-            User currentUser = stack.getCurrentSession().getOnlineUser();
+            User currentUser = getOnlineUser();
             String username = currentUser.getUsername();
             LocalDateTime date = LocalDateTime.now();  
             
             Question question = new Question(date, username, title, content); // Creamos la Pregunta
+            
+            /* Registramos las preguntas en los respectos ArrayLists */
             stack.getQuestions().add(question);
-            currentUser.makeQuestion(Question.getTotalQuestions());
+            getUser(username).getQuestions().add(Question.getTotalQuestions());
+            
             if(labels!=null){
                 question.setLabels(labels);
             }
@@ -121,7 +132,7 @@ public class StackController {
         if(selectedQuestion==null){
             return false;
         }else if(stack.getCurrentSession().getType()){ // getType debe ser True -online-
-            String username = stack.getCurrentSession().getOnlineUsername();
+            String username = getOnlineUsername();
             LocalDateTime date = LocalDateTime.now();
             Answer answer = new Answer(date, username, content, selectedQuestion.getAnswersCount()+1);
             selectedQuestion.addAnswer(answer);
@@ -139,14 +150,13 @@ public class StackController {
      * @param amountReward la cantidad dispuesta como recompenas
      * @return booleano que indica si se logra recompensar o no la pregunta
      */
-    public boolean reward(Question rewardedQuestion, int amountReward){
+    public boolean reward(Question rewardedQuestion, int amountReward) throws InsufficientReputationException{
         User onlineUser = this.stack.getCurrentSession().getOnlineUser();
         int userReputation = onlineUser.getReputation();
         int calculateError = userReputation - amountReward;
-        if(userReputation<=0){
-            return false;
-        }else if(calculateError<0){
-            return false;
+        if(userReputation<=0 || calculateError<0){
+            throw new InsufficientReputationException();
+            
         }
         rewardedQuestion.setReward(amountReward);
         onlineUser.setReputation(-1*amountReward);
@@ -161,8 +171,8 @@ public class StackController {
      * @return true cuando se acepta correctamente la respuesta, se cierra la pregunta
      */
     public boolean accept(Question question, Answer answer){
-        User currentUser = this.stack.getCurrentSession().getOnlineUser();
-        User rewardedUser = this.stack.getUserByName(answer.getAuthor());
+        User currentUser = getOnlineUser();
+        User rewardedUser = getUser(answer.getAuthor());
         if(currentUser.haveQuestion(question.getId())){
             question.setState();
             answer.setState();
@@ -179,7 +189,99 @@ public class StackController {
         return false;
         
     }
+        
     
+    /* Funcionalidad de vote */ 
+    
+    /** 
+     * Emite un voto positivo del usuario activo hacia el bloque seleccionado.
+     * @param selection Instancia de Pregunta/Respuesta que extiende de InteractiveBlock
+     */
+    public void submitVoteUp(InteractiveBlock selection){
+        selection.getVotes().setVotesUp(true);
+        selection.getSubmittedVotes().put(this.getOnlineUsername(), true);
+        
+        setUsersReputation(selection, true);
+        System.out.println(selection.getVotes().toString());
+        
+    }
+    
+    /** 
+     * Elimina el voto positivo que el usuario activo emitió al bloque seleccionado.
+     * @param selection Instancia de Pregunta/Respuesta que extiende de InteractiveBlock
+     */
+    public void undoVoteUp(InteractiveBlock selection){
+        setUsersReputation(selection);
+        
+        selection.getVotes().setVotesUp(false);
+        selection.getSubmittedVotes().remove(this.getOnlineUsername());
+        
+        
+        System.out.println(selection.getVotes().toString());
+    }
+    
+    /** 
+     * Emite un voto negativo del usuario activo hacia el bloque seleccionado.
+     * @param selection Instancia de Pregunta/Respuesta que extiende de InteractiveBlock
+     */
+    public void submitVoteDown(InteractiveBlock selection){
+        selection.getVotes().setVotesDown(true);
+        selection.getSubmittedVotes().put(this.getOnlineUsername(), false);
+        
+        // damos la reputación que otorga un voto negativo
+        setUsersReputation(selection, false);
+        System.out.println(selection.getVotes().toString());
+    }
+    
+    /** 
+     * Elimina el voto negativo que el usuario activo emitió en el bloque seleccionado.
+     * @param selection Instancia de Pregunta/Respuesta que extiende de InteractiveBlock
+     */
+    public void undoVoteDown(InteractiveBlock selection){
+        // quitamos la reputación que otorgó un voto negativo
+        setUsersReputation(selection);
+        
+        selection.getVotes().setVotesDown(false);
+        selection.getSubmittedVotes().remove(this.getOnlineUsername());
+        
+        
+        System.out.println(selection.getVotes().toString());
+    }
+    
+    /**
+     * Metodo utilizado para dar reputación a los usuarios involucrados en el voto
+     * @param selection Bloque seleccionado (instancia de pregunta/respuesta).
+     * @param voteType booleano que data el tipo de voto: true positivo, false negativo.
+     */
+    private void setUsersReputation(InteractiveBlock selection, boolean voteType){
+        User whoVoted = getOnlineUser();
+        User userVoted = getUser(selection.getAuthor());
+
+        if(voteType){
+            userVoted.setReputation(10);
+        }else{
+            userVoted.setReputation(-2);
+            whoVoted.setReputation(-1);
+        }
+    }
+    
+    /**
+     * Método utilizado para remover la reputación entregada si se retira el voto emitido al bloque.
+     * @param selection Bloque seleccionado (instancia de pregunta/respuesta).
+     */
+    private void setUsersReputation(InteractiveBlock selection){
+        User whoVoted = getOnlineUser();
+        User userVoted = getUser(selection.getAuthor());
+        HashMap<String, Boolean> submittedVotes = selection.getSubmittedVotes();
+        Boolean submittedVote = submittedVotes.get(whoVoted.getUsername());
+        
+        if(submittedVote){
+            whoVoted.setReputation(-10);
+        }else{
+            userVoted.setReputation(2);
+            userVoted.setReputation(1);
+        }
+    }
     /**
      * Verifica mediante el nombre de usuario si existe username o no, dentro de ArrayList users
      * @param username nombre de usuario
@@ -214,7 +316,6 @@ public class StackController {
     }
     
     
-    
     private boolean matchesPassword(char[] password0, char[] password1){
         if(password0.length!=password1.length){
             return false;
@@ -228,6 +329,22 @@ public class StackController {
         
         return true;
     }
+    
+        
+    /**
+     * Obtiene la instancia del usuario registrado con el String username
+     * @param username String representando al nombre del usuario
+     * @return User Usuario con nombre de usuario username
+     */
+    public User getUser(String username){
+        for(User u : stack.getUsers()){
+            if(u.getUsername().equals(username)){
+                return u;
+            }
+        }
+        return null;
+    }
+    
     
     /**
      * Crea una etiqueta y la agrega a labels
@@ -282,8 +399,12 @@ public class StackController {
         return stack.getCurrentSession();
     }
     
+    public User getOnlineUser(){
+        return stack.getCurrentSession().getOnlineUser();
+    }
+    
     public String getOnlineUsername(){
-        return stack.getCurrentSession().getOnlineUsername();
+        return getOnlineUser().getUsername();
     }
     
     public boolean getSessionType(){
@@ -306,10 +427,13 @@ public class StackController {
         return date.format(formatter);
     }
     
+    // Registrar la ultima pregunta del stack para tenerla a mano
     private void setLastQuestion(Question q){
         this.lastQuestion = q;
     }
     private void setLastAnswer(Answer a){
+        
         this.lastAnswer = a;
     }
+
 }

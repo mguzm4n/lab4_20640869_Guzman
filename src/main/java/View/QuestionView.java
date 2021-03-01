@@ -10,8 +10,6 @@ import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -31,11 +29,11 @@ public class QuestionView extends javax.swing.JDialog {
      * @param stackController Controlador de la logica interna de StackOverflow
      * @param selectedRow Entero que indica cual es la fila seleccionada. Cada fila se corresponde con un id de pregunta (fila+1 == id de Pregunta) 
      */
-    public QuestionView(java.awt.Frame parent, boolean modal, StackController stackController, Model.Question question) throws IOException{
+    public QuestionView(StartFrame parent, boolean modal, Model.Question question) throws IOException{
         super(parent, modal);
         initComponents();
-        this.stackController= stackController;
-        this.parent = (StartFrame) parent;
+        this.stackController= parent.getStackController();
+        this.parent = parent;
         this.question = question;
        
         questionContentText.setMargin(new Insets(2,5,2,5));
@@ -208,13 +206,13 @@ public class QuestionView extends javax.swing.JDialog {
                                 .addComponent(rewardAmountLbl)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(rewardLbl))
-                            .addComponent(questionContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(labelsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(qAuthorLbl)
                                 .addGap(12, 12, 12)
-                                .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(questionContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -303,8 +301,8 @@ public class QuestionView extends javax.swing.JDialog {
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(answersSuperPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addComponent(answersSuperPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,7 +340,7 @@ public class QuestionView extends javax.swing.JDialog {
                           question.getState().equals("Abierta");
 
         for(Model.Answer ans: question.getAnswers()){
-            AnswerView answerView = new AnswerView(ans);  
+            AnswerView answerView = new AnswerView(this, ans);  
             if(makeBtn){
                 javax.swing.JLabel acceptLbl = answerView.getStateLbl();
                 acceptLbl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -373,20 +371,22 @@ public class QuestionView extends javax.swing.JDialog {
            //acceptLblBtn.setText("Aceptada");
            
            stackController.accept(question, acceptedAnswer);
+           parent.getRewardLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
            questionStateLbl.setText(question.getState());
            answersPanel.removeAll();
            fillAnswersPanel();
            answersPanel.revalidate();
            answersPanel.repaint();
+           
            JOptionPane.showMessageDialog(this, "Respuesta Aceptada Correctamente");
        }
     }
     
     private void addQuestionVotesView() throws IOException{
-        votesContainerPanel.add(new VotesView(), BorderLayout.PAGE_START);
-        JPanel blackSpacePanel = new JPanel();
-        blackSpacePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        votesContainerPanel.add(blackSpacePanel, BorderLayout.PAGE_END);
+        votesContainerPanel.add(new VotesView(this, question), BorderLayout.PAGE_START);
+        JPanel whiteSpacePanel = new JPanel();
+        whiteSpacePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        votesContainerPanel.add(whiteSpacePanel, BorderLayout.PAGE_END);
     }
     
     public void addNewAnswer() throws IOException{
@@ -396,7 +396,7 @@ public class QuestionView extends javax.swing.JDialog {
         }
         
         
-        AnswerView answerView = new AnswerView(stackController.getLastAnswer());
+        AnswerView answerView = new AnswerView(this, stackController.getLastAnswer());
         answerView.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
         answersPanel.add(answerView);
         answersPanel.revalidate();
@@ -433,7 +433,14 @@ public class QuestionView extends javax.swing.JDialog {
         
         this.setVisible(true);
     }
-
+    public StartFrame getParent(){
+        return parent;
+    }
+    
+    public StackController getStackController(){
+        return stackController;
+    }
+    
     public Model.Question getQuestion(){
         return question;
     }

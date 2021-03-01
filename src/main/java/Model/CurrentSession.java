@@ -35,8 +35,5 @@ public class CurrentSession{
     public User getOnlineUser(){
         return this.onlineUser;
     }
-    public String getOnlineUsername(){
-        return this.onlineUser.getUsername();
-    }
     
 }

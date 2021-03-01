@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * @author Marcelo Guzmán
  */
 public class User {
+    private int id;
     protected String username;
     protected char[] password;
     protected int reputation;
@@ -18,13 +19,10 @@ public class User {
         this.reputation = 0;
         this.questions = new ArrayList<>();
     }
+   
     
-    /**
-     * Cuando un usuario realiza una pregunta, se agrega el id de pregunta en un ArrayList de cada User
-     * @param questionId pregunta recien hecha por usuario
-     */
-    public void makeQuestion(int questionId){
-        questions.add(questionId);
+    public int getId(){
+        return this.id;
     }
     
     /**

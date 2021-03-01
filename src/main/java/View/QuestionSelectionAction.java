@@ -26,9 +26,9 @@ public class QuestionSelectionAction extends MouseAdapter{
     private JTable questionsTable;
     private StartFrame parent;
     
-    public QuestionSelectionAction(JTable questionsTable, StackController stackController, StartFrame parent){
+    public QuestionSelectionAction(StartFrame parent, JTable questionsTable){
         this.parent = parent;
-        this.stackController = stackController;
+        this.stackController = parent.getStackController();
         this.questionsTable = questionsTable;
     }
     
@@ -56,7 +56,7 @@ public class QuestionSelectionAction extends MouseAdapter{
         System.out.println("\n");
         QuestionView questionView = null;
         try {
-            questionView = new QuestionView(parent, true, stackController, 
+            questionView = new QuestionView(parent, true, 
                     stackController.getQuestionByID(selectedQuestion));
         } catch (IOException ex) {
             Logger.getLogger(QuestionSelectionAction.class.getName()).log(Level.SEVERE, null, ex);

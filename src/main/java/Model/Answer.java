@@ -20,6 +20,7 @@ public class Answer extends InteractiveBlock {
         this.postDate = date;
         this.state = "No Aceptada";
         totalAnswers++;
+        
     }
     
     /**

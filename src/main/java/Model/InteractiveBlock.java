@@ -1,15 +1,17 @@
 package Model;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 /** Abstraccion de un bloque interactivo dentro del Sistema de Preguntas y Respuestas
  * La clase InteractiveBlock une atributos basicos que debe tener una Pregunta\Respuesta
- * @author Marcelo Guzmán
+ * @author Marcelo Guzman
  */
 public abstract class InteractiveBlock {
     protected String author, content, state;
     protected int id;
     protected LocalDateTime postDate;
     protected Votes votes = new Votes();
+    protected HashMap<String, Boolean> submittedVotes = new HashMap<>();
     
     /**
      * Recupera el autor asignado a una Pregunta/Respuesta
@@ -52,6 +54,16 @@ public abstract class InteractiveBlock {
         return id;
     }
     
+     /**
+     * Recupera la instancia particular de la clase Votes de cada Pregunta/Respuesta que extienden de InteractiveBlock
+     * @return int representando al ID
+     */
+    public Votes getVotes(){
+        return votes;
+    }
     
+    public HashMap<String, Boolean> getSubmittedVotes(){
+        return submittedVotes;
+    }
     
 }

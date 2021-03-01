@@ -9,11 +9,9 @@ import Controller.StackController;
 import Errors.NoCurrentUserOnlineFoundException;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
-import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,14 +33,13 @@ public class StartFrame extends javax.swing.JFrame {
         this.stackController = stackController;
         initComponents();
         
+        initQuestionTables();
+         
+        // Identificamos las tablas con strings ya que ambas son instancias de JTable
         questionsScrollPane.setName(ALL_QUESTIONS_TABLE);
         userQuestionsScrollPane.setName(ONLINE_USER_QUESTIONS);
         
-        questionsTable.setDefaultEditor(Object.class, null); // deshabilitamos la opcion de editar las filas de la tabla de preguntas
-        userQuestionsTable.setDefaultEditor(Object.class, null);
-    
-        questionsTable.addMouseListener(new QuestionSelectionAction(questionsTable, stackController, this));
-        userQuestionsTable.addMouseListener(new QuestionSelectionAction(userQuestionsTable, stackController, this));
+       
         
       }
 
@@ -64,6 +61,7 @@ public class StartFrame extends javax.swing.JFrame {
         logOutBtn = new javax.swing.JButton();
         reputationMsgLbl = new javax.swing.JLabel();
         makeQuestionBtn = new javax.swing.JButton();
+        rewardLbl = new javax.swing.JLabel();
         container2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -158,6 +156,9 @@ public class StartFrame extends javax.swing.JFrame {
             }
         });
 
+        rewardLbl.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        rewardLbl.setText("INT");
+
         javax.swing.GroupLayout loggedPanelLayout = new javax.swing.GroupLayout(loggedPanel);
         loggedPanel.setLayout(loggedPanelLayout);
         loggedPanelLayout.setHorizontalGroup(
@@ -170,11 +171,14 @@ public class StartFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(usernameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(makeQuestionBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(reputationMsgLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(logOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51))
+                    .addComponent(logOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(loggedPanelLayout.createSequentialGroup()
+                        .addComponent(reputationMsgLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(rewardLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(25, 25, 25))
         );
         loggedPanelLayout.setVerticalGroup(
             loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,7 +188,9 @@ public class StartFrame extends javax.swing.JFrame {
                     .addGroup(loggedPanelLayout.createSequentialGroup()
                         .addComponent(logOutBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(reputationMsgLbl))
+                        .addGroup(loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(reputationMsgLbl)
+                            .addComponent(rewardLbl)))
                     .addGroup(loggedPanelLayout.createSequentialGroup()
                         .addGroup(loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(usernameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -288,6 +294,27 @@ public class StartFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void initQuestionTables(){
+        javax.swing.JTable tables[] = {questionsTable, userQuestionsTable};
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+        
+        
+        for(int i = 0; i < questionsTable.getColumnCount(); i++) { 
+            questionsTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        for(int i = 0; i < userQuestionsTable.getColumnCount(); i++) {
+            userQuestionsTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        
+        for(javax.swing.JTable table : tables){
+            table.setDefaultEditor(Object.class, null); // deshabilitamos la opcion de editar las filas de la tabla de preguntas
+            table.addMouseListener(new QuestionSelectionAction(this, questionsTable));
+            // agregar la opcion de la vista de la pregunta al cliquearla
+        }
+       
+    }
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         LoginDialog loginDialog = new LoginDialog(this, true, stackController);
         runJDialog(loginDialog);
@@ -315,6 +342,9 @@ public class StartFrame extends javax.swing.JFrame {
     private void makeQuestionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeQuestionBtnActionPerformed
         QuestionForm questionForm = new QuestionForm(this, true, stackController);
         runJDialog(questionForm);
+        
+        
+        
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
 
     private void userQuestionsBtnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_userQuestionsBtnItemStateChanged
@@ -347,16 +377,21 @@ public class StartFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_userQuestionsBtnItemStateChanged
 
+    
     public void runJDialog(javax.swing.JDialog dialog){
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
+    
+
     
     public void run() {
        setTitle("StackOverflow");
         
         // Editamos el tamano de la font de los titulos de la tabla. 
         questionsTable.getTableHeader().setFont(new java.awt.Font("Tahoma", 0 , 14));
+       
+        
         userQuestionsBtn.setVisible(false);
         
         setLocationRelativeTo(null); // Seteamos la posición del frame StartFrame en el centro de la pantalla
@@ -377,6 +412,7 @@ public class StartFrame extends javax.swing.JFrame {
     private javax.swing.JTable questionsTable;
     private javax.swing.JButton registerButton;
     private javax.swing.JLabel reputationMsgLbl;
+    private javax.swing.JLabel rewardLbl;
     private javax.swing.JToggleButton userQuestionsBtn;
     private javax.swing.JScrollPane userQuestionsScrollPane;
     private javax.swing.JTable userQuestionsTable;
@@ -385,6 +421,9 @@ public class StartFrame extends javax.swing.JFrame {
     private javax.swing.JLabel welcomeMsgLbl;
     // End of variables declaration//GEN-END:variables
 
+    public StackController getStackController(){
+        return stackController;
+    }
     public javax.swing.JPanel getContainer1(){
         return container1;
     }
@@ -396,6 +435,9 @@ public class StartFrame extends javax.swing.JFrame {
     }
     public javax.swing.JLabel getUsernameDisplay(){
         return usernameDisplay;
+    }
+    public javax.swing.JLabel getRewardLbl(){
+        return rewardLbl;
     }
     public javax.swing.JToggleButton getUserQuestionsBtn(){
         return userQuestionsBtn;

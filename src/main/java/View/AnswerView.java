@@ -1,6 +1,7 @@
 package View;
 
 
+import Controller.StackController;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -14,15 +15,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class AnswerView extends javax.swing.JPanel{
+    QuestionView parent;
     JLabel stateLbl, authorLbl, datePostedLbl;
     JTextArea contentTxtArea;
     
     
-    public AnswerView(Model.Answer ans) throws IOException{
+    public AnswerView(QuestionView parent, Model.Answer ans) throws IOException{
+        this.parent = parent;
         initComponents();
         GridBagConstraints constraints;
         
-        VotesView votesView = new VotesView();
+        VotesView votesView = new VotesView(parent, ans);
         
         JScrollPane contentScrollPane = new JScrollPane();
         contentTxtArea = new JTextArea();

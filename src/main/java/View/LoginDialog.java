@@ -198,10 +198,11 @@ public class LoginDialog extends javax.swing.JDialog {
             JPanel container1 = parentFrame.getContainer1();
             //JPanel panel = parentFrame.getLoggedPanel();
             parentFrame.getUsernameDisplay().setText(stackController.getOnlineUsername());
-            if(stackController.getCurrentSession().getOnlineUser().getQuestions().isEmpty()){
+            if(stackController.getOnlineUser().getQuestions().isEmpty()){
                 parentFrame.getUserQuestionsBtn().setEnabled(false);
             }
             parentFrame.getUserQuestionsBtn().setVisible(true);
+            parentFrame.getRewardLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
             java.awt.CardLayout cl = (java.awt.CardLayout) container1.getLayout();
             cl.show(container1, "card2"); // card2 es el identificador del panel con opciones de inicio de sesion
             // Cerramos la ventana de inicio de sesion

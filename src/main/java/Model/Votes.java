@@ -1,11 +1,10 @@
 package Model;
 
 /**
- * Clase votes que engloba votos positivos y negativos que puede tener un Usuario - User
- * @author Marcelo Guzmán
+ * Clase votes que engloba votos positivos y negativos que puede tener una instancia de la clase User
  */
 public class Votes {
-    private int votesUp, votesDown;
+    private int votesUp, votesDown, totalVotes;
     
     /** 
      * Constructor de Votes
@@ -14,20 +13,9 @@ public class Votes {
     public Votes(){
         this.votesUp = 0;
         this.votesDown = 0;
+        this.totalVotes = 0;
     }
     
-    /**
-     * Realizar el voto
-     * @param type boolean que determina si se incrementa votesUp o votesDown
-     */
-    public void makeVote(boolean type){
-        if(type){
-            this.votesUp++;
-        }
-        else{
-            this.votesDown++;
-        }
-    }
     
     /** 
      * Obtencion de los votos positivos de una pregunta/respuesta
@@ -44,8 +32,33 @@ public class Votes {
     public int getVotesDown(){
         return this.votesDown;
     }
+    /** 
+     * Obtencion de los votos negativos de una pregunta/respuesta
+     * @return int que acumula los votos negativos
+     */
+    public int getTotalVotes(){
+        return this.totalVotes;
+    }
     
+    public void setVotesUp(boolean type){
+        if(type){
+            this.votesUp++;
+            this.totalVotes++;
+        }else{
+            this.votesUp--;
+            this.totalVotes--;
+        }
+    }
     
+    public void setVotesDown(boolean type){
+        if(type){
+            this.votesDown++;
+            this.totalVotes--;
+        }else{
+            this.votesDown--;
+            this.totalVotes++;
+        }
+    }
     /**
      * Representacion de la informacion respectiva a los votos de una 
      * Pregunta/Respuesta
@@ -53,6 +66,6 @@ public class Votes {
      */
     @Override
     public String toString(){
-        return "Votos Positivos: "+this.votesUp+" || "+"Votos Negativos: "+this.votesDown;
+        return "Votos Positivos: "+this.votesUp+" || "+"Votos Negativos: "+this.votesDown +"- Total: "+this.totalVotes;
     }
 }
