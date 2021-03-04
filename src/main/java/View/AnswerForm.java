@@ -6,10 +6,12 @@
 package View;
 
 import Controller.StackController;
+import Errors.FieldEmptyException;
 import java.awt.Insets;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,13 +25,12 @@ public class AnswerForm extends javax.swing.JDialog {
     /**
      * Creates new form AnswerView
      */
-    public AnswerForm(javax.swing.JDialog parent, boolean modal, StackController stackController, Model.Question question) {
+    public AnswerForm(QuestionView parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.parent = (QuestionView) parent;
-        
-        this.stackController = stackController;
-        this.question = question;
+        this.parent = parent;
+        this.stackController = parent.getStackController();
+        this.question = parent.getQuestion();
         answerContentTextArea.setMargin(new Insets(2,5,2,5));
     }
 
@@ -96,13 +97,21 @@ public class AnswerForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void sendAnswerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendAnswerBtnActionPerformed
-        stackController.answer(question, answerContentTextArea.getText());
+        
         try {
-            parent.addNewAnswer();
-        } catch (IOException ex) {
-            Logger.getLogger(AnswerForm.class.getName()).log(Level.SEVERE, null, ex);
+            stackController.answer(question, 
+                                   answerContentTextArea.getText().equals("Escriba su respuesta aqui...")? "" : answerContentTextArea.getText());
+            try {
+                parent.addNewAnswer();
+                JOptionPane.showMessageDialog(this, "Respuesta enviada correctamente");
+                this.dispose();
+            } catch (IOException ex) {
+                Logger.getLogger(AnswerForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (FieldEmptyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        this.dispose();
+        
     }//GEN-LAST:event_sendAnswerBtnActionPerformed
 
     

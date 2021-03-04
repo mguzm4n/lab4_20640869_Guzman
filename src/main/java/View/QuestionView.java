@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 
 public class QuestionView extends javax.swing.JDialog {
     Model.Question question;
-    Model.Answer acceptedAnswer;
     StackController stackController;
     StartFrame parent;
     
@@ -304,7 +303,7 @@ public class QuestionView extends javax.swing.JDialog {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerButtonActionPerformed
-        AnswerForm answerForm = new AnswerForm(this, true, stackController, question);
+        AnswerForm answerForm = new AnswerForm(this, true);
         answerForm.run();
     }//GEN-LAST:event_answerButtonActionPerformed
 
@@ -327,9 +326,8 @@ public class QuestionView extends javax.swing.JDialog {
                 acceptLbl.addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mouseClicked(java.awt.event.MouseEvent evt){
-                        QuestionView.this.acceptedAnswer = ans;
                         try {
-                            acceptLblMouseClicked(evt);
+                            acceptLblMouseClicked(evt, ans);
                         } catch (IOException ex) {
                             System.out.println(ex.getMessage());
                         }
@@ -367,14 +365,14 @@ public class QuestionView extends javax.swing.JDialog {
         rewardAmountLbl.setText(question.getReward()==0? "Sin recompensa" : Integer.toString(question.getReward()));
         questionStateLbl.setText(question.getState());
     }
-    private void acceptLblMouseClicked(MouseEvent evt) throws IOException{
+    private void acceptLblMouseClicked(MouseEvent evt, Model.Answer ans) throws IOException{
        int selectedOption = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea aceptar esta pregunta?");
        if(selectedOption == JOptionPane.YES_OPTION){
            
            //javax.swing.JLabel acceptLblBtn = (javax.swing.JLabel) evt.getComponent();
            //acceptLblBtn.setText("Aceptada");
            
-           stackController.accept(question, acceptedAnswer);
+           stackController.accept(question, ans);
            parent.getReputationLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
            questionStateLbl.setText(question.getState());
            rewardLbl.setEnabled(false);

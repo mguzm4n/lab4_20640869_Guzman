@@ -9,7 +9,6 @@ import Controller.StackController;
 import Errors.InsufficientReputationException;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
@@ -32,7 +31,7 @@ public class RewardQuestionForm extends javax.swing.JDialog {
         this.parent = (QuestionView) parent;
         this.stackController = stackController;
         setLocationRelativeTo(null);
-        
+        backBtn.requestFocus();
         
         rewardAmountTxtField.addFocusListener(new FocusAdapter(){
             @Override

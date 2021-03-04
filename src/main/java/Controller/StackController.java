@@ -130,7 +130,10 @@ public class StackController {
      * @param content contenido de la respuesta
      * @return booleano que indica correcta agregacion de respuesta
      */
-    public boolean answer(Question selectedQuestion, String content){
+    public boolean answer(Question selectedQuestion, String content) throws FieldEmptyException{
+        if(content.isEmpty() || content.isBlank()){
+            throw new FieldEmptyException();
+        }
         if(selectedQuestion==null){
             return false;
         }else if(stack.getCurrentSession().getType()){ // getType debe ser True -online-
