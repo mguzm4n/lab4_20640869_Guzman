@@ -149,7 +149,6 @@ public class VotesView extends javax.swing.JPanel {
        
         if(evt.getStateChange()==ItemEvent.DESELECTED){
             stackController.undoVoteUp(interactiveBlock);
-            
         }else{
             if(voteDownBtn.isSelected()){
                 voteDownBtn.setSelected(false);

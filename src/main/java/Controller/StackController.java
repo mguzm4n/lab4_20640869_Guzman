@@ -280,10 +280,10 @@ public class StackController {
         Boolean submittedVote = submittedVotes.get(whoVoted.getUsername());
         
         if(submittedVote){
-            whoVoted.setReputation(-10);
+            userVoted.setReputation(-10);
         }else{
             userVoted.setReputation(2);
-            userVoted.setReputation(1);
+            whoVoted.setReputation(1);
         }
     }
     
