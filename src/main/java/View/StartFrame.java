@@ -309,7 +309,7 @@ public class StartFrame extends javax.swing.JFrame {
         
         for(javax.swing.JTable table : tables){
             table.setDefaultEditor(Object.class, null); // deshabilitamos la opcion de editar las filas de la tabla de preguntas
-            table.addMouseListener(new QuestionSelectionAction(this, questionsTable));
+            table.addMouseListener(new QuestionSelectionAction(this, table));
             // agregar la opcion de la vista de la pregunta al cliquearla
         }
        
