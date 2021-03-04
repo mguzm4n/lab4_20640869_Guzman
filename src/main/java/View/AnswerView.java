@@ -1,7 +1,6 @@
 package View;
 
 
-import Controller.StackController;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -15,18 +14,28 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class AnswerView extends javax.swing.JPanel{
-    QuestionView parent;
-    JLabel stateLbl, authorLbl, datePostedLbl;
-    JTextArea contentTxtArea;
+    private QuestionView parent;
+    private JLabel stateLbl, authorLbl, datePostedLbl;
+    private JTextArea contentTxtArea;
+    private VotesView votesView;
     
     
     public AnswerView(QuestionView parent, Model.Answer ans) throws IOException{
         this.parent = parent;
         initComponents();
+        
+        
+        votesView = new VotesView(parent, ans);
+        
+        placeComponents();
+        setAnswerInfo(ans);
+    }
+    
+    /**
+     * Disponer elementos en el panel segun los Layouts elegidos.
+     */
+    private void placeComponents(){
         GridBagConstraints constraints;
-        
-        VotesView votesView = new VotesView(parent, ans);
-        
         JScrollPane contentScrollPane = new JScrollPane();
         contentTxtArea = new JTextArea();
         datePostedLbl = new JLabel("dd/mm/yyyy", JLabel.CENTER);
@@ -79,9 +88,13 @@ public class AnswerView extends javax.swing.JPanel{
         add(answerInfoPane, constraints);
         
         // (int top, int left, int bottom, int right)
-        setAnswerInfo(ans);
     }
-
+    
+    
+    /**
+     * Setear las etiquetas con la información propia de la Respuesta.
+     * @param ans Respuesta de la cual obtendremos sus atributos.
+     */
     private void setAnswerInfo(Model.Answer ans){
         authorLbl.setText(ans.getAuthor());
         contentTxtArea.setText(ans.getContent());
@@ -100,6 +113,7 @@ public class AnswerView extends javax.swing.JPanel{
         setLayout(new java.awt.GridBagLayout());
     }// </editor-fold>//GEN-END:initComponents
 
+    
     public javax.swing.JLabel getStateLbl(){
         return stateLbl;
     }

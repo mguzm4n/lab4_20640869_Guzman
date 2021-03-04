@@ -15,9 +15,11 @@ import java.util.HashMap;
  * @author Marcelo Guzmán
  */
 public class StackController {
-    Question lastQuestion;
-    Answer lastAnswer;
-    Stack stack = new Stack();
+    Stack stack;
+    
+    public StackController(Stack stack){
+        this.stack = stack;
+    }
     
     /**
      * Ingresa un nuevo usuario al ArrayList de usuarios del Stack
@@ -38,7 +40,7 @@ public class StackController {
             return true;
         }else{
             if(!existsUser(username)){
-                stack.getUsers().add(new User(username, password));  
+                stack.getUsers().add(new User(username, password)); 
                 return true;
             }else{
                 throw new UsernameAlreadyExistsException();
@@ -116,7 +118,7 @@ public class StackController {
             if(labels!=null){
                 question.setLabels(labels);
             }
-            setLastQuestion(question);
+            
             return true;
         }
         return false;
@@ -137,7 +139,6 @@ public class StackController {
             Answer answer = new Answer(date, username, content, selectedQuestion.getAnswersCount()+1);
             selectedQuestion.addAnswer(answer);
             selectedQuestion.setUpdateDate(date);
-            setLastAnswer(answer);
             return true;
         }else{
             return false;
@@ -282,6 +283,7 @@ public class StackController {
             userVoted.setReputation(1);
         }
     }
+    
     /**
      * Verifica mediante el nombre de usuario si existe username o no, dentro de ArrayList users
      * @param username nombre de usuario
@@ -315,7 +317,12 @@ public class StackController {
         return -1;
     }
     
-    
+    /**
+     * Metodo que ayuda a verificar la credencial password de un usuario.
+     * @param password0 Contrasena a evaluar
+     * @param password1 Contrasena real del usuario
+     * @return true si la contrasena coincide; false en cualquier caso de que no coincidan.
+     */
     private boolean matchesPassword(char[] password0, char[] password1){
         if(password0.length!=password1.length){
             return false;
@@ -415,25 +422,29 @@ public class StackController {
         return stack.getLabels();
     }
     
+    /**
+     * Recupera desde el stack con el que se maneja, la última pregunta hecha.
+     * @return Instancia de clase Question que representa a la ultima pregunta registrada en el stack principal.
+     */
     public Question getLastQuestion(){
-        return this.lastQuestion;
+        ArrayList<Question> questions = stack.getQuestions();
+        return questions.get(questions.size()-1);
     }
-    public Answer getLastAnswer(){
-        return this.lastAnswer;
+    
+    /**
+     * Recupera desde el stack con el que se trabaja, la ultima respuesta a una pregunta (parámetro).
+     * @param question Pregunta de donde se quiere recuperar la ultima respuesta.
+     * @return Ultima respuesta hecha en parámetro question.
+     */
+    public Answer getLastAnswer(Question question){
+        ArrayList<Answer> answers = question.getAnswers();
+        return answers.get(answers.size()-1);
     }
     
     public static String setDateFormat(LocalDateTime date, String format){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         return date.format(formatter);
     }
-    
-    // Registrar la ultima pregunta del stack para tenerla a mano
-    private void setLastQuestion(Question q){
-        this.lastQuestion = q;
-    }
-    private void setLastAnswer(Answer a){
-        
-        this.lastAnswer = a;
-    }
+
 
 }

@@ -19,10 +19,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Marcelo Guzmán
  */
 public class StartFrame extends javax.swing.JFrame {
-    static final int QAUTHOR_COLUMN = 0, QTITLE_COLUMN = 1, QANSWERSCOUNT_COLUMN = 2, QDATE_COLUMN = 3;
     static final String ALL_QUESTIONS_TABLE = "allQuestionsTable", ONLINE_USER_QUESTIONS = "onlineUserQuestions";
 
-    boolean firstCreated = true; 
+    
     StackController stackController;
 
     /**
@@ -51,20 +50,20 @@ public class StartFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         container1 = new javax.swing.JPanel();
-        logRegisterPanel = new javax.swing.JPanel();
-        welcomeLabel = new javax.swing.JLabel();
+        javax.swing.JPanel logRegisterPanel = new javax.swing.JPanel();
+        javax.swing.JLabel welcomeLabel = new javax.swing.JLabel();
         registerButton = new javax.swing.JButton();
         loginButton = new javax.swing.JButton();
-        loggedPanel = new javax.swing.JPanel();
-        welcomeMsgLbl = new javax.swing.JLabel();
+        javax.swing.JPanel loggedPanel = new javax.swing.JPanel();
+        javax.swing.JLabel welcomeMsgLbl = new javax.swing.JLabel();
         usernameDisplay = new javax.swing.JLabel();
-        logOutBtn = new javax.swing.JButton();
-        reputationMsgLbl = new javax.swing.JLabel();
+        javax.swing.JButton logOutBtn = new javax.swing.JButton();
+        javax.swing.JLabel reputationMsgLbl = new javax.swing.JLabel();
         makeQuestionBtn = new javax.swing.JButton();
-        rewardLbl = new javax.swing.JLabel();
+        reputationLbl = new javax.swing.JLabel();
         container2 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        javax.swing.JPanel noQuestionsMsgPanel = new javax.swing.JPanel();
+        javax.swing.JLabel noQuestionsMsgLbl = new javax.swing.JLabel();
         questionsScrollPane = new javax.swing.JScrollPane();
         questionsTable = new javax.swing.JTable();
         userQuestionsScrollPane = new javax.swing.JScrollPane();
@@ -156,8 +155,8 @@ public class StartFrame extends javax.swing.JFrame {
             }
         });
 
-        rewardLbl.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        rewardLbl.setText("INT");
+        reputationLbl.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        reputationLbl.setText("INT");
 
         javax.swing.GroupLayout loggedPanelLayout = new javax.swing.GroupLayout(loggedPanel);
         loggedPanel.setLayout(loggedPanelLayout);
@@ -177,7 +176,7 @@ public class StartFrame extends javax.swing.JFrame {
                     .addGroup(loggedPanelLayout.createSequentialGroup()
                         .addComponent(reputationMsgLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(rewardLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(reputationLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(25, 25, 25))
         );
         loggedPanelLayout.setVerticalGroup(
@@ -190,7 +189,7 @@ public class StartFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(reputationMsgLbl)
-                            .addComponent(rewardLbl)))
+                            .addComponent(reputationLbl)))
                     .addGroup(loggedPanelLayout.createSequentialGroup()
                         .addGroup(loggedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(usernameDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,29 +203,29 @@ public class StartFrame extends javax.swing.JFrame {
 
         container2.setLayout(new java.awt.CardLayout());
 
-        jPanel1.setBackground(new java.awt.Color(247, 247, 247));
+        noQuestionsMsgPanel.setBackground(new java.awt.Color(247, 247, 247));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("No hay preguntas que mostrar actualmente");
+        noQuestionsMsgLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        noQuestionsMsgLbl.setText("No hay preguntas que mostrar actualmente");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout noQuestionsMsgPanelLayout = new javax.swing.GroupLayout(noQuestionsMsgPanel);
+        noQuestionsMsgPanel.setLayout(noQuestionsMsgPanelLayout);
+        noQuestionsMsgPanelLayout.setHorizontalGroup(
+            noQuestionsMsgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(noQuestionsMsgPanelLayout.createSequentialGroup()
                 .addGap(87, 87, 87)
-                .addComponent(jLabel2)
+                .addComponent(noQuestionsMsgLbl)
                 .addContainerGap(100, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        noQuestionsMsgPanelLayout.setVerticalGroup(
+            noQuestionsMsgPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(noQuestionsMsgPanelLayout.createSequentialGroup()
                 .addGap(83, 83, 83)
-                .addComponent(jLabel2)
+                .addComponent(noQuestionsMsgLbl)
                 .addContainerGap(89, Short.MAX_VALUE))
         );
 
-        container2.add(jPanel1, "card2");
+        container2.add(noQuestionsMsgPanel, "card2");
 
         questionsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -316,7 +315,7 @@ public class StartFrame extends javax.swing.JFrame {
        
     }
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        LoginDialog loginDialog = new LoginDialog(this, true, stackController);
+        LoginDialog loginDialog = new LoginDialog(this, true);
         runJDialog(loginDialog);
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -340,7 +339,7 @@ public class StartFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_logOutBtnActionPerformed
 
     private void makeQuestionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeQuestionBtnActionPerformed
-        QuestionForm questionForm = new QuestionForm(this, true, stackController);
+        QuestionForm questionForm = new QuestionForm(this, true);
         runJDialog(questionForm);
         
         
@@ -401,24 +400,16 @@ public class StartFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel container1;
     private javax.swing.JPanel container2;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JButton logOutBtn;
-    private javax.swing.JPanel logRegisterPanel;
-    private javax.swing.JPanel loggedPanel;
     private javax.swing.JButton loginButton;
     private javax.swing.JButton makeQuestionBtn;
     private javax.swing.JScrollPane questionsScrollPane;
     private javax.swing.JTable questionsTable;
     private javax.swing.JButton registerButton;
-    private javax.swing.JLabel reputationMsgLbl;
-    private javax.swing.JLabel rewardLbl;
+    private javax.swing.JLabel reputationLbl;
     private javax.swing.JToggleButton userQuestionsBtn;
     private javax.swing.JScrollPane userQuestionsScrollPane;
     private javax.swing.JTable userQuestionsTable;
     private javax.swing.JLabel usernameDisplay;
-    private javax.swing.JLabel welcomeLabel;
-    private javax.swing.JLabel welcomeMsgLbl;
     // End of variables declaration//GEN-END:variables
 
     public StackController getStackController(){
@@ -430,14 +421,12 @@ public class StartFrame extends javax.swing.JFrame {
     public javax.swing.JPanel getContainer2(){
         return container2;
     }
-    public javax.swing.JPanel getLoggedPanel(){
-        return loggedPanel;
-    }
+    
     public javax.swing.JLabel getUsernameDisplay(){
         return usernameDisplay;
     }
-    public javax.swing.JLabel getRewardLbl(){
-        return rewardLbl;
+    public javax.swing.JLabel getReputationLbl(){
+        return reputationLbl;
     }
     public javax.swing.JToggleButton getUserQuestionsBtn(){
         return userQuestionsBtn;

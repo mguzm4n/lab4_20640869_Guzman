@@ -23,10 +23,6 @@ import javax.swing.event.DocumentListener;
 public class RegisterDialog extends javax.swing.JDialog {
     StackController stackController;
     
-    
-    /**
-     * Creates new form registerDialog
-     */
     public RegisterDialog(java.awt.Frame parent, boolean modal, StackController stackController) {
         super(parent, modal);
         initComponents();
@@ -227,6 +223,10 @@ public class RegisterDialog extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_backToStartActionPerformed
 
+    /**
+     * Se determina la acción que ocurrirá cuando el usuario termina apretando registerBtn
+     * @param evt 
+     */
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         try {
             registerAction();
@@ -235,8 +235,15 @@ public class RegisterDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_registerBtnActionPerformed
 
+    /**
+     * Se llama en este metodo al controlador que posea el metodo register().
+     * @throws NoPasswordEnteredException
+     * @throws UsernameAlreadyExistsException
+     * @throws NoUsernameEnteredException 
+     */
     private void registerAction() throws NoPasswordEnteredException, UsernameAlreadyExistsException, NoUsernameEnteredException{
         if(stackController.register(usernameField.getText(), passwField.getPassword())){
+            
             successDialog.pack(); // Metodo para que el componente JDialog adopte la "preferedSize" 
             successDialog.setLocationRelativeTo(null);
             successDialog.setVisible(true);

@@ -58,12 +58,53 @@ public class RewardQuestionForm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        successDialog = new javax.swing.JDialog();
+        successMsgLbl = new javax.swing.JLabel();
+        closeBtn = new javax.swing.JButton();
         text1Lbl = new javax.swing.JLabel();
         actualRewardLbl = new javax.swing.JLabel();
         text2Lbl = new javax.swing.JLabel();
         rewardAmountTxtField = new javax.swing.JTextField();
         sendRewardBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
+
+        successDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        successDialog.setTitle("StackOverflow - Éxito");
+        successDialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+
+        successMsgLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        successMsgLbl.setText("Pregunta recompensada!");
+
+        closeBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        closeBtn.setText("Volver");
+        closeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout successDialogLayout = new javax.swing.GroupLayout(successDialog.getContentPane());
+        successDialog.getContentPane().setLayout(successDialogLayout);
+        successDialogLayout.setHorizontalGroup(
+            successDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(successDialogLayout.createSequentialGroup()
+                .addGap(85, 85, 85)
+                .addComponent(closeBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, successDialogLayout.createSequentialGroup()
+                .addContainerGap(42, Short.MAX_VALUE)
+                .addComponent(successMsgLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
+        );
+        successDialogLayout.setVerticalGroup(
+            successDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(successDialogLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(successMsgLbl)
+                .addGap(18, 18, 18)
+                .addComponent(closeBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -161,7 +202,11 @@ public class RewardQuestionForm extends javax.swing.JDialog {
                 
                 // Actualizar recompensas en vista principal y vista de la pregunta
                 parent.getRewardAmountLbl().setText(Integer.toString(parent.getQuestion().getReward()));
-                parent.getParent().getRewardLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
+                parent.getParent().getReputationLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
+                
+                successDialog.setLocationRelativeTo(null);
+                successDialog.pack();
+                successDialog.setVisible(true);
             } catch (InsufficientReputationException ex) {
                 JOptionPane.showMessageDialog(parent, ex.getMessage());
             }
@@ -173,12 +218,20 @@ public class RewardQuestionForm extends javax.swing.JDialog {
         
     }//GEN-LAST:event_sendRewardBtnActionPerformed
 
+    private void closeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBtnActionPerformed
+        successDialog.dispose();
+        this.dispose();
+    }//GEN-LAST:event_closeBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel actualRewardLbl;
     private javax.swing.JButton backBtn;
+    private javax.swing.JButton closeBtn;
     private javax.swing.JTextField rewardAmountTxtField;
     private javax.swing.JButton sendRewardBtn;
+    private javax.swing.JDialog successDialog;
+    private javax.swing.JLabel successMsgLbl;
     private javax.swing.JLabel text1Lbl;
     private javax.swing.JLabel text2Lbl;
     // End of variables declaration//GEN-END:variables

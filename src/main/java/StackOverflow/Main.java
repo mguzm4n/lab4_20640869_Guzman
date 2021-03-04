@@ -3,13 +3,15 @@
  * La clase StackController y el Package View utilizan los modelos.
  */
 package StackOverflow;
-import View.StartFrame;
+import Model.Stack;
 import Controller.StackController;
+import View.StartFrame;
+import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args){
-        
-        StackController stackController = new StackController();
+        Stack stack = new Stack();
+        StackController stackController = new StackController(stack);
         
         stackController.createLabel("Java", "Java es el nombre de un entorno o plataforma de computación originaria de Sun Microsystems, capaz de ejecutar aplicaciones "
                 + "desarrolladas usando el lenguaje de programación Java u otros lenguajes que compilen a bytecode y un conjunto de herramientas "
@@ -21,7 +23,14 @@ public class Main {
         stackController.createLabel("C++", "C++ es un lenguaje de programación que proviene de la extensión del lenguaje C para que pudiese manipular objetos.");
         stackController.createLabel("TypeScript", "Superconjunto de JavaScript, que esencialmente añade tipos estáticos y objetos basados en clases.");
         
-        StartFrame startingView = new StartFrame(stackController);
-        startingView.run();
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                StartFrame startingView = new StartFrame(stackController);
+                startingView.run();
+            }
+            
+        }
+        );
     }
 }

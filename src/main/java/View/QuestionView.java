@@ -26,8 +26,6 @@ public class QuestionView extends javax.swing.JDialog {
      * Creates new form QuestionView
      * @param parent JFrame padre, en este exclusivo caso se refiere a StartFrame
      * @param modal Determinar el acceso/ no acceso a elementos de JFrame parent mientras se abre el JDialog
-     * @param stackController Controlador de la logica interna de StackOverflow
-     * @param selectedRow Entero que indica cual es la fila seleccionada. Cada fila se corresponde con un id de pregunta (fila+1 == id de Pregunta) 
      */
     public QuestionView(StartFrame parent, boolean modal, Model.Question question) throws IOException{
         super(parent, modal);
@@ -35,32 +33,13 @@ public class QuestionView extends javax.swing.JDialog {
         this.stackController= parent.getStackController();
         this.parent = parent;
         this.question = question;
-       
-        questionContentText.setMargin(new Insets(2,5,2,5));
+        questionContentText.setMargin(new Insets(2,5,2,5)); // ajuste inicial, como no se puede editar initComponents()
         
         addQuestionVotesView();
+        addQuestionLabels();
+        setQuestionAttributes();
+
         
-        java.awt.CardLayout cl = (java.awt.CardLayout) labelsPanel.getLayout();
-        if(question.getLabels()!=null){
-            // Anadimos las etiquetas al JList
-            DefaultListModel<String> listModel = new DefaultListModel<>();
-            for(Model.Label l : question.getLabels()){
-                listModel.addElement(l.getName());
-            }
-            
-            labelsList.setModel(listModel);
-            cl.show(labelsPanel, "labels");
-        }else{
-            cl.show(labelsPanel, "nolabels");
-        }
-        
-        
-        questionTitleLbl.setText(question.getTitle());
-        questionContentText.setText(question.getContent());
-        qAuthorTextLbl.setText(question.getAuthor());
-        postedTextLbl.setText(StackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy"));
-        rewardAmountLbl.setText(question.getReward()==0? "Sin recompensa" : Integer.toString(question.getReward()));
-        questionStateLbl.setText(question.getState());
         fillAnswersPanel(); 
     }
 
@@ -72,33 +51,33 @@ public class QuestionView extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
+        javax.swing.JPanel superiorPanel = new javax.swing.JPanel();
         labelsPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        javax.swing.JScrollPane labelsScrollPane = new javax.swing.JScrollPane();
         labelsList = new javax.swing.JList<>();
-        noLabelsLbl = new javax.swing.JLabel();
+        javax.swing.JLabel noLabelsLbl = new javax.swing.JLabel();
         questionTitleLbl = new javax.swing.JLabel();
-        postedLbl = new javax.swing.JLabel();
-        qAuthorLbl = new javax.swing.JLabel();
+        javax.swing.JLabel postedLbl = new javax.swing.JLabel();
+        javax.swing.JLabel qAuthorLbl = new javax.swing.JLabel();
         qAuthorTextLbl = new javax.swing.JLabel();
         postedTextLbl = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        javax.swing.JLabel rewardMsgLbl = new javax.swing.JLabel();
         rewardAmountLbl = new javax.swing.JLabel();
         rewardLbl = new javax.swing.JLabel();
         questionStateLbl = new javax.swing.JLabel();
-        questionContentPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        javax.swing.JPanel questionContentPanel = new javax.swing.JPanel();
+        javax.swing.JScrollPane qcontentScrollPane = new javax.swing.JScrollPane();
         questionContentText = new javax.swing.JTextArea();
         votesContainerPanel = new javax.swing.JPanel();
-        backBtn = new javax.swing.JButton();
+        javax.swing.JButton backBtn = new javax.swing.JButton();
         optionsPanel = new javax.swing.JPanel();
         answerButton = new javax.swing.JButton();
-        notLoggedMsgLbl = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        javax.swing.JLabel notLoggedMsgLbl = new javax.swing.JLabel();
+        javax.swing.JLabel closedQuestionLbl = new javax.swing.JLabel();
         answersSuperPanel = new javax.swing.JPanel();
-        answersScrollPane = new javax.swing.JScrollPane();
+        javax.swing.JScrollPane answersScrollPane = new javax.swing.JScrollPane();
         answersPanel = new javax.swing.JPanel();
-        noAnswersMsgLbl = new javax.swing.JLabel();
+        javax.swing.JLabel noAnswersMsgLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("StackOverflow");
@@ -114,9 +93,9 @@ public class QuestionView extends javax.swing.JDialog {
         });
         labelsList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
         labelsList.setVisibleRowCount(-1);
-        jScrollPane2.setViewportView(labelsList);
+        labelsScrollPane.setViewportView(labelsList);
 
-        labelsPanel.add(jScrollPane2, "labels");
+        labelsPanel.add(labelsScrollPane, "labels");
 
         noLabelsLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         noLabelsLbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -140,8 +119,8 @@ public class QuestionView extends javax.swing.JDialog {
         postedTextLbl.setText("dd/MM/yyyy");
         postedTextLbl.setPreferredSize(new java.awt.Dimension(39, 17));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Recompensa:");
+        rewardMsgLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        rewardMsgLbl.setText("Recompensa:");
 
         rewardAmountLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         rewardAmountLbl.setText("Sin recompensa");
@@ -162,15 +141,15 @@ public class QuestionView extends javax.swing.JDialog {
 
         questionContentPanel.setLayout(new java.awt.GridBagLayout());
 
-        jScrollPane1.setBorder(null);
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        qcontentScrollPane.setBorder(null);
+        qcontentScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         questionContentText.setEditable(false);
         questionContentText.setColumns(20);
         questionContentText.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         questionContentText.setLineWrap(true);
         questionContentText.setRows(5);
-        jScrollPane1.setViewportView(questionContentText);
+        qcontentScrollPane.setViewportView(questionContentText);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -179,7 +158,7 @@ public class QuestionView extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        questionContentPanel.add(jScrollPane1, gridBagConstraints);
+        questionContentPanel.add(qcontentScrollPane, gridBagConstraints);
 
         votesContainerPanel.setLayout(new java.awt.BorderLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -187,26 +166,26 @@ public class QuestionView extends javax.swing.JDialog {
         gridBagConstraints.gridy = 0;
         questionContentPanel.add(votesContainerPanel, gridBagConstraints);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout superiorPanelLayout = new javax.swing.GroupLayout(superiorPanel);
+        superiorPanel.setLayout(superiorPanelLayout);
+        superiorPanelLayout.setHorizontalGroup(
+            superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(superiorPanelLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(superiorPanelLayout.createSequentialGroup()
+                        .addGroup(superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(superiorPanelLayout.createSequentialGroup()
                                 .addComponent(postedLbl)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(postedTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel1)
+                                .addComponent(rewardMsgLbl)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rewardAmountLbl)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(rewardLbl))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(superiorPanelLayout.createSequentialGroup()
                                 .addComponent(labelsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(qAuthorLbl)
@@ -214,34 +193,34 @@ public class QuestionView extends javax.swing.JDialog {
                                 .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(questionContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(superiorPanelLayout.createSequentialGroup()
                         .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(94, 94, 94)
                         .addComponent(questionStateLbl)
                         .addGap(48, 48, 48))))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        superiorPanelLayout.setVerticalGroup(
+            superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(superiorPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(questionTitleLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(questionStateLbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(questionContentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(superiorPanelLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(qAuthorTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(qAuthorLbl, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(superiorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(postedLbl)
                     .addComponent(postedTextLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
+                    .addComponent(rewardMsgLbl)
                     .addComponent(rewardAmountLbl)
                     .addComponent(rewardLbl))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -271,10 +250,10 @@ public class QuestionView extends javax.swing.JDialog {
         notLoggedMsgLbl.setText("Inicie sesion para responder");
         optionsPanel.add(notLoggedMsgLbl, "notLoggedMsg");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Pregunta cerrada");
-        optionsPanel.add(jLabel3, "card4");
+        closedQuestionLbl.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        closedQuestionLbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        closedQuestionLbl.setText("Pregunta cerrada");
+        optionsPanel.add(closedQuestionLbl, "card4");
 
         answersSuperPanel.setLayout(new java.awt.CardLayout());
 
@@ -298,7 +277,7 @@ public class QuestionView extends javax.swing.JDialog {
                 .addGap(114, 114, 114)
                 .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(superiorPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(answersSuperPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -307,7 +286,7 @@ public class QuestionView extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(superiorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(answersSuperPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -363,6 +342,31 @@ public class QuestionView extends javax.swing.JDialog {
             answersPanel.add(answerView);
         }
     }
+    
+    private void addQuestionLabels(){
+        java.awt.CardLayout cl = (java.awt.CardLayout) labelsPanel.getLayout();
+        if(question.getLabels()!=null){
+            // Anadimos las etiquetas al JList
+            DefaultListModel<String> listModel = new DefaultListModel<>();
+            for(Model.Label l : question.getLabels()){
+                listModel.addElement(l.getName());
+            }
+            
+            labelsList.setModel(listModel);
+            cl.show(labelsPanel, "labels");
+        }else{
+            cl.show(labelsPanel, "nolabels");
+        }
+    }
+    
+    private void setQuestionAttributes(){
+        questionTitleLbl.setText(question.getTitle());
+        questionContentText.setText(question.getContent());
+        qAuthorTextLbl.setText(question.getAuthor());
+        postedTextLbl.setText(StackController.setDateFormat(question.getPostDate(), "dd/MM/yyyy"));
+        rewardAmountLbl.setText(question.getReward()==0? "Sin recompensa" : Integer.toString(question.getReward()));
+        questionStateLbl.setText(question.getState());
+    }
     private void acceptLblMouseClicked(MouseEvent evt) throws IOException{
        int selectedOption = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea aceptar esta pregunta?");
        if(selectedOption == JOptionPane.YES_OPTION){
@@ -371,8 +375,11 @@ public class QuestionView extends javax.swing.JDialog {
            //acceptLblBtn.setText("Aceptada");
            
            stackController.accept(question, acceptedAnswer);
-           parent.getRewardLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
+           parent.getReputationLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
            questionStateLbl.setText(question.getState());
+           rewardLbl.setEnabled(false);
+           rewardLbl.setText("Respondida");
+           
            answersPanel.removeAll();
            fillAnswersPanel();
            answersPanel.revalidate();
@@ -396,14 +403,15 @@ public class QuestionView extends javax.swing.JDialog {
         }
         
         
-        AnswerView answerView = new AnswerView(this, stackController.getLastAnswer());
+        AnswerView answerView = new AnswerView(this, stackController.getLastAnswer(question));
         answerView.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, new Color(219, 219, 219)));
         answersPanel.add(answerView);
         answersPanel.revalidate();
         answersPanel.repaint();
         
         // Como las filas se enumeran desde el 0 y los ID comienzan desde el 1 restamos 1 al ID.
-        parent.getQuestionsTable().getModel().setValueAt(question.getAnswersCount(), question.getId() - 1, StartFrame.QANSWERSCOUNT_COLUMN);
+        // 2 es el número de la columna que posee las respuestas
+        parent.getQuestionsTable().getModel().setValueAt(question.getAnswersCount(), question.getId() - 1, 2);
     }
 
     public void run(){
@@ -422,13 +430,17 @@ public class QuestionView extends javax.swing.JDialog {
             }
             answerButton.setVisible(true);
             
+            if(question.getState().equals("Cerrada")){
+                rewardLbl.setEnabled(false);
+                rewardLbl.setText("Respondida");
+            }
             clOptions.show(optionsPanel, "answerBtn");
         }else{
-            rewardLbl.setVisible(false);
+            rewardLbl.setText(question.getState().equals("Cerrada")? "Respondida" : "Sin Respuesta");
+            rewardLbl.setEnabled(false);
             answerButton.setVisible(false);
             clOptions.show(optionsPanel, "notLoggedMsg");
         }
-        
         
         
         this.setVisible(true);
@@ -450,25 +462,12 @@ public class QuestionView extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton answerButton;
     private javax.swing.JPanel answersPanel;
-    private javax.swing.JScrollPane answersScrollPane;
     private javax.swing.JPanel answersSuperPanel;
-    private javax.swing.JButton backBtn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> labelsList;
     private javax.swing.JPanel labelsPanel;
-    private javax.swing.JLabel noAnswersMsgLbl;
-    private javax.swing.JLabel noLabelsLbl;
-    private javax.swing.JLabel notLoggedMsgLbl;
     private javax.swing.JPanel optionsPanel;
-    private javax.swing.JLabel postedLbl;
     private javax.swing.JLabel postedTextLbl;
-    private javax.swing.JLabel qAuthorLbl;
     private javax.swing.JLabel qAuthorTextLbl;
-    private javax.swing.JPanel questionContentPanel;
     private javax.swing.JTextArea questionContentText;
     private javax.swing.JLabel questionStateLbl;
     private javax.swing.JLabel questionTitleLbl;
@@ -477,3 +476,34 @@ public class QuestionView extends javax.swing.JDialog {
     private javax.swing.JPanel votesContainerPanel;
     // End of variables declaration//GEN-END:variables
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

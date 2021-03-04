@@ -67,34 +67,7 @@ public class VotesView extends javax.swing.JPanel {
         hasVoted = false;
         
         initVotes();
-        if(stackController.getSessionType()){
-            
-            voteUpBtn.addItemListener(new java.awt.event.ItemListener() {
-                @Override
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    voteUpButtonClicked(evt);
-                }
-            });
-
-            voteDownBtn.addItemListener(new java.awt.event.ItemListener() {
-                @Override
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    voteDownButtonClicked(evt);
-                }
-            });
-        }else{
-            for(JToggleButton btn : btnlist){
-                btn.setSelected(false);
-               
-                btn.addActionListener(new java.awt.event.ActionListener() {
-                    @Override
-
-                    public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(null, "Usuarios sin sesión iniciada no pueden emitir votos");
-                    }
-                });
-            }
-        }
+        initButtonsEvents(btnlist);
         
         
         add(voteUpBtn);
@@ -127,6 +100,51 @@ public class VotesView extends javax.swing.JPanel {
         
     }
     
+    private void initButtonsEvents(ArrayList<JToggleButton> btnlist){
+        if(stackController.getSessionType()){
+            if(!stackController.getOnlineUsername().equals(interactiveBlock.getAuthor())){
+                voteUpBtn.addItemListener(new java.awt.event.ItemListener() {
+                    @Override
+                    public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                        voteUpButtonClicked(evt);
+                    }
+                });
+
+                voteDownBtn.addItemListener(new java.awt.event.ItemListener() {
+                    @Override
+                    public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                        voteDownButtonClicked(evt);
+                    }
+                }); 
+            }else{
+                for(JToggleButton btn : btnlist){
+                btn.setSelected(false);
+               
+                btn.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "Usted no puede emitir votos a su propio contenido.");
+                    }
+                });
+            }
+            }
+            
+        }else{
+            for(JToggleButton btn : btnlist){
+                btn.setSelected(false);
+               
+                btn.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "Usuarios sin sesión iniciada no pueden emitir votos");
+                    }
+                });
+            }
+        }
+    }
+    
     private void voteUpButtonClicked(ItemEvent evt){
        
         if(evt.getStateChange()==ItemEvent.DESELECTED){
@@ -140,7 +158,7 @@ public class VotesView extends javax.swing.JPanel {
         }
         Integer totalVotes = interactiveBlock.getVotes().getTotalVotes();
         totalVotesLbl.setText(totalVotes.toString());
-        parent.getParent().getRewardLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
+        parent.getParent().getReputationLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
     }
     
     private void voteDownButtonClicked(ItemEvent evt){

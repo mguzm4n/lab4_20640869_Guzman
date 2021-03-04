@@ -38,7 +38,7 @@ public abstract class InteractiveBlock {
     }
     
     /**
-     * Recupera la fecha en la cual fue creada la pregunta\respuesta
+     * Recupera la fecha como instancia de LocalDateTime, en la cual fue creada la pregunta\respuesta
      * @return Clase LocalDateTime con la fecha en la que se creo el bloque
      */
     public LocalDateTime getPostDate(){
@@ -46,15 +46,16 @@ public abstract class InteractiveBlock {
     }
     
     /**
-     * Recupera el id CORRELATIVO segun el orden en el Sistema visible al Usuario 
-     * en el que se muestran las preguntas/respuestas
-     * @return int representando al ID
+     * Recupera el id correlativo segun el orden del contexto del bloque interactivo.
+     * Para una instancia de clase Question, recupera el Id universal de la pregunta en el stack.
+     * Para una instancia de la clase Answer, recupera el Id relativo a la Pregunta donde está contenida la respuesta.
+     * @return int representando al ID de un objeto instanciado, que extiende de InteractiveBlock
      */
     public int getId(){
         return id;
     }
     
-     /**
+    /**
      * Recupera la instancia particular de la clase Votes de cada Pregunta/Respuesta que extienden de InteractiveBlock
      * @return int representando al ID
      */
@@ -62,6 +63,11 @@ public abstract class InteractiveBlock {
         return votes;
     }
     
+    
+    /**
+     * Recupera los votos emitidos hacia una instancia de Pregunta/Respuesta que extienden de InteractiveBlock
+     * @return HashMap cuya key es el autor (String) y el value (Boolean) el tipo de voto emitido al bloque interactivo
+     */
     public HashMap<String, Boolean> getSubmittedVotes(){
         return submittedVotes;
     }

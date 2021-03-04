@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Esta clase determina el comportamiento de las tablas que poseen preguntas cuando se cliquea sobre ellas
  */
 package View;
 
@@ -13,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -32,17 +29,21 @@ public class QuestionSelectionAction extends MouseAdapter{
         this.questionsTable = questionsTable;
     }
     
+    /**
+     * 
+     * @param evt 
+     */
     @Override
     public void mouseClicked(java.awt.event.MouseEvent evt) {
         
         int selectedQuestion = -1;
         String questionsTableVisibleName = "";
-        JScrollPane  questionsTableVisible;
+        JScrollPane  visibleQuestionTable;
         
         for(Component c : parent.getContainer2().getComponents()){
             if(c.isVisible()){
-                questionsTableVisible = (JScrollPane) c;
-                questionsTableVisibleName = questionsTableVisible.getName();
+                visibleQuestionTable = (JScrollPane) c;
+                questionsTableVisibleName = visibleQuestionTable.getName();
             }
         }
         // Buscamos el ID que corresponda a la pregunta seleccionada
@@ -53,24 +54,26 @@ public class QuestionSelectionAction extends MouseAdapter{
             selectedQuestion = userQuestions.get(questionsTable.getSelectedRow());
         }
         
-        System.out.println("\n");
-        QuestionView questionView = null;
-        try {
+        
+        QuestionView questionView;
+        
+        try { // Esta excepción es por el uso de íconos
             questionView = new QuestionView(parent, true, 
                     stackController.getQuestionByID(selectedQuestion));
+            questionView.addWindowListener(new java.awt.event.WindowAdapter(){
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    questionsTable.clearSelection();
+                }
+
+            });
+            questionView.run();
         } catch (IOException ex) {
             Logger.getLogger(QuestionSelectionAction.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
-        questionView.addWindowListener(new java.awt.event.WindowAdapter(){
-            @Override
-            public void windowClosed(WindowEvent e) {
-                questionsTable.clearSelection();
-            }
-
-        });
-        questionView.run();
+        
         
         
     }

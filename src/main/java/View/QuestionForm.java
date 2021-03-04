@@ -12,8 +12,6 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.table.DefaultTableModel;
@@ -31,12 +29,12 @@ public class QuestionForm extends javax.swing.JDialog {
     /**
      * Creates new form QuestionForm
      */
-    public QuestionForm(java.awt.Frame parent, boolean modal, StackController stackController) {
+    public QuestionForm(StartFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         labelsDisplayed = false;
-        this.parent = (StartFrame) parent;
-        this.stackController = stackController;
+        this.parent = parent;
+        this.stackController = parent.getStackController();
         qContentTxtArea.setMargin(new Insets(2,5,2,5));
     }
 
@@ -48,24 +46,25 @@ public class QuestionForm extends javax.swing.JDialog {
     private void initComponents() {
 
         successDialog = new javax.swing.JDialog();
-        successLbl = new javax.swing.JLabel();
-        backToStartBtn = new javax.swing.JButton();
+        javax.swing.JLabel successLbl = new javax.swing.JLabel();
+        javax.swing.JButton backToStartBtn = new javax.swing.JButton();
         formPanel = new javax.swing.JPanel();
         firstFormPanel = new javax.swing.JPanel();
-        formTitle1Lbl = new javax.swing.JLabel();
+        javax.swing.JLabel formTitle1Lbl = new javax.swing.JLabel();
         titleField = new javax.swing.JTextField();
-        titleLbl = new javax.swing.JLabel();
-        questionLbl = new javax.swing.JLabel();
-        qContentScrollPane = new javax.swing.JScrollPane();
+        javax.swing.JLabel titleLbl = new javax.swing.JLabel();
+        javax.swing.JLabel questionLbl = new javax.swing.JLabel();
+        javax.swing.JScrollPane qContentScrollPane = new javax.swing.JScrollPane();
         qContentTxtArea = new javax.swing.JTextArea();
-        continueBtn = new javax.swing.JButton();
+        javax.swing.JButton continueBtn = new javax.swing.JButton();
         addLabelsCheckBtn = new javax.swing.JRadioButton();
+        javax.swing.JButton getBackBtn = new javax.swing.JButton();
         labelsFormPanel = new javax.swing.JPanel();
-        formTitle2Lbl = new javax.swing.JLabel();
-        backBtn = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        javax.swing.JLabel formTitle2Lbl = new javax.swing.JLabel();
+        javax.swing.JButton backBtn = new javax.swing.JButton();
+        javax.swing.JScrollPane lblsListScrollPane = new javax.swing.JScrollPane();
         labelsContainer = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        javax.swing.JScrollPane lblsDescriptionScrollPane = new javax.swing.JScrollPane();
         labelDescriptionTxtArea = new javax.swing.JTextArea();
         postBtn = new javax.swing.JButton();
 
@@ -146,6 +145,14 @@ public class QuestionForm extends javax.swing.JDialog {
             }
         });
 
+        getBackBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        getBackBtn.setText("Volver");
+        getBackBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                getBackBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout firstFormPanelLayout = new javax.swing.GroupLayout(firstFormPanel);
         firstFormPanel.setLayout(firstFormPanelLayout);
         firstFormPanelLayout.setHorizontalGroup(
@@ -153,13 +160,12 @@ public class QuestionForm extends javax.swing.JDialog {
             .addGroup(firstFormPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(formTitle1Lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(firstFormPanelLayout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(firstFormPanelLayout.createSequentialGroup()
                                 .addComponent(addLabelsCheckBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
                                 .addComponent(continueBtn))
                             .addGroup(firstFormPanelLayout.createSequentialGroup()
                                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,14 +174,20 @@ public class QuestionForm extends javax.swing.JDialog {
                                 .addGap(20, 20, 20)
                                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(qContentScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                                    .addComponent(titleField))))))
+                                    .addComponent(titleField)))))
+                    .addGroup(firstFormPanelLayout.createSequentialGroup()
+                        .addComponent(formTitle1Lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(getBackBtn)))
                 .addGap(18, 18, 18))
         );
         firstFormPanelLayout.setVerticalGroup(
             firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(firstFormPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(formTitle1Lbl)
+                .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(formTitle1Lbl)
+                    .addComponent(getBackBtn))
                 .addGap(18, 18, 18)
                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(titleLbl)
@@ -184,7 +196,7 @@ public class QuestionForm extends javax.swing.JDialog {
                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(questionLbl)
                     .addComponent(qContentScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(firstFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(continueBtn)
                     .addComponent(addLabelsCheckBtn))
@@ -205,13 +217,13 @@ public class QuestionForm extends javax.swing.JDialog {
         });
 
         labelsContainer.setLayout(new java.awt.GridLayout(0, 1));
-        jScrollPane1.setViewportView(labelsContainer);
+        lblsListScrollPane.setViewportView(labelsContainer);
 
         labelDescriptionTxtArea.setColumns(20);
         labelDescriptionTxtArea.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         labelDescriptionTxtArea.setLineWrap(true);
         labelDescriptionTxtArea.setRows(5);
-        jScrollPane2.setViewportView(labelDescriptionTxtArea);
+        lblsDescriptionScrollPane.setViewportView(labelDescriptionTxtArea);
 
         postBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         postBtn.setText("Publicar Pregunta");
@@ -228,14 +240,14 @@ public class QuestionForm extends javax.swing.JDialog {
             .addGroup(labelsFormPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblsListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(formTitle2Lbl)
                         .addComponent(backBtn)))
                 .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(labelsFormPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblsDescriptionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(62, 62, 62))
                     .addGroup(labelsFormPanelLayout.createSequentialGroup()
                         .addGap(56, 56, 56)
@@ -250,10 +262,10 @@ public class QuestionForm extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(labelsFormPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(labelsFormPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                        .addComponent(lblsListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                         .addGap(18, 18, 18))
                     .addGroup(labelsFormPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblsDescriptionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(postBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -284,7 +296,7 @@ public class QuestionForm extends javax.swing.JDialog {
             cl.show(formPanel, "card2");
            
             if(!labelsDisplayed){
-                labelsDisplayed = true;
+                labelsDisplayed = true; 
                 ArrayList<Label> stackLabels = stackController.getLabels();
                 for(Label l : stackLabels){
                     JRadioButton labelSelectBtn = new JRadioButton(l.getName());
@@ -336,9 +348,13 @@ public class QuestionForm extends javax.swing.JDialog {
             makeQuestion();
         }
     }//GEN-LAST:event_postBtnActionPerformed
+
+    private void getBackBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getBackBtnActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_getBackBtnActionPerformed
     
-    private void labelSelectedActionPerformed(java.awt.event.ActionEvent evt, javax.swing.JRadioButton labelCheckButton){
-        labelDescriptionTxtArea.setText(stackController.getLabel(labelCheckButton.getText()).getDescription());
+    private void labelSelectedActionPerformed(java.awt.event.ActionEvent evt, JRadioButton btnSelected){
+        labelDescriptionTxtArea.setText(stackController.getLabel(btnSelected.getText()).getDescription());
     }
     
     private void makeQuestion(){
@@ -378,25 +394,14 @@ public class QuestionForm extends javax.swing.JDialog {
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton addLabelsCheckBtn;
-    private javax.swing.JButton backBtn;
-    private javax.swing.JButton backToStartBtn;
-    private javax.swing.JButton continueBtn;
     private javax.swing.JPanel firstFormPanel;
     private javax.swing.JPanel formPanel;
-    private javax.swing.JLabel formTitle1Lbl;
-    private javax.swing.JLabel formTitle2Lbl;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea labelDescriptionTxtArea;
     private javax.swing.JPanel labelsContainer;
     private javax.swing.JPanel labelsFormPanel;
     private javax.swing.JButton postBtn;
-    private javax.swing.JScrollPane qContentScrollPane;
     private javax.swing.JTextArea qContentTxtArea;
-    private javax.swing.JLabel questionLbl;
     private javax.swing.JDialog successDialog;
-    private javax.swing.JLabel successLbl;
     private javax.swing.JTextField titleField;
-    private javax.swing.JLabel titleLbl;
     // End of variables declaration//GEN-END:variables
 }

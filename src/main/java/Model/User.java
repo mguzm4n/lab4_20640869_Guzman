@@ -7,6 +7,7 @@ import java.util.ArrayList;
  * @author Marcelo Guzmán
  */
 public class User {
+    static int totalUsers = 0;
     private int id;
     protected String username;
     protected char[] password;
@@ -14,6 +15,8 @@ public class User {
     protected ArrayList<Integer> questions;
     
     public User(String username, char[] password){
+        totalUsers = totalUsers + 1;
+        this.id = totalUsers;
         this.username = username;
         this.password = password;
         this.reputation = 0;
