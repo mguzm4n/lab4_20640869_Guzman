@@ -1,3 +1,7 @@
+/*
+ * Vista de una respuesta a una pergunta. Extiende de JPanel.
+ */
+
 package View;
 
 
@@ -113,7 +117,10 @@ public class AnswerView extends javax.swing.JPanel{
         setLayout(new java.awt.GridBagLayout());
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    /**
+     * Recupera el JLabel que tiene el String con el estado de la respuesta.
+     * @return 
+     */
     public javax.swing.JLabel getStateLbl(){
         return stateLbl;
     }

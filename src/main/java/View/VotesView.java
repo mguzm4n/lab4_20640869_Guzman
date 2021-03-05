@@ -1,3 +1,6 @@
+/*
+ * Vista de los votos. Extiende de JPanel.
+ */
 package View;
 
 import Controller.StackController;
@@ -22,9 +25,8 @@ public class VotesView extends javax.swing.JPanel {
     private JToggleButton voteUpBtn, voteDownBtn;
     private JLabel totalVotesLbl;
     private Boolean hasVoted;
-    /**
-     * Creates new form VotesView
-     */
+
+    
     public VotesView(QuestionView parent, InteractiveBlock interactiveBlock) throws IOException{
         this.stackController = parent.getStackController();
         this.parent = parent;
@@ -76,6 +78,9 @@ public class VotesView extends javax.swing.JPanel {
         
     }
     
+    /**
+     * Determina los estados iniciales de los votos segun el usuario activo
+     */
     private void initVotes(){
         
         Integer totalVotes = interactiveBlock.getVotes().getTotalVotes();
@@ -100,6 +105,10 @@ public class VotesView extends javax.swing.JPanel {
         
     }
     
+    /**
+     * Agrega los eventos correspondientes a los botones
+     * @param btnlist 
+     */
     private void initButtonsEvents(ArrayList<JToggleButton> btnlist){
         if(stackController.getSessionType()){
             if(!stackController.getOnlineUsername().equals(interactiveBlock.getAuthor())){
@@ -145,6 +154,10 @@ public class VotesView extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * accion que se realiza cuando demos un voto positivo.
+     * @param evt 
+     */
     private void voteUpButtonClicked(ItemEvent evt){
        
         if(evt.getStateChange()==ItemEvent.DESELECTED){
@@ -160,6 +173,10 @@ public class VotesView extends javax.swing.JPanel {
         parent.getParent().getReputationLbl().setText(Integer.toString(stackController.getOnlineUser().getReputation()));
     }
     
+    /**
+     * Accion que se realiza cuando demos un voto negativo.
+     * @param evt 
+     */
     private void voteDownButtonClicked(ItemEvent evt){
         
         if(evt.getStateChange()==ItemEvent.DESELECTED){

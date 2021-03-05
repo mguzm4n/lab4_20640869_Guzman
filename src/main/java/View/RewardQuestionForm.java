@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Vista que extiende de JDialog y sirve para darle recompensa a una pregunta.
  */
 package View;
 
@@ -191,6 +189,10 @@ public class RewardQuestionForm extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
+    /**
+     * Metodo que invoca al metodo de stackControllger: reward()
+     * @param evt 
+     */
     private void sendRewardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendRewardBtnActionPerformed
         Integer rewardAmount;
         

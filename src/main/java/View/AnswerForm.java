@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Vista del formulario para enviar una pregunta.
  */
 package View;
 
@@ -22,9 +20,7 @@ public class AnswerForm extends javax.swing.JDialog {
     StackController stackController;
     boolean firstFocused;
     QuestionView parent;
-    /**
-     * Creates new form AnswerView
-     */
+
     public AnswerForm(QuestionView parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -95,7 +91,11 @@ public class AnswerForm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Llamada a stackController.answer() y realiza la respuesta.
+     * @param evt 
+     */
     private void sendAnswerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendAnswerBtnActionPerformed
         
         try {

@@ -30,7 +30,7 @@ public class QuestionSelectionAction extends MouseAdapter{
     }
     
     /**
-     * 
+     * Metodo para hacer que cuando se cliquee alguna fila de la tabla, se abrirá una nueva instancia de QuestionView
      * @param evt 
      */
     @Override

@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Vista de la ventana para realizar una Pregunta. Extiende de JDialog.
  */
 package View;
 
@@ -26,9 +24,7 @@ public class QuestionForm extends javax.swing.JDialog {
     boolean labelsDisplayed;
     StartFrame parent;
     
-    /**
-     * Creates new form QuestionForm
-     */
+
     public QuestionForm(StartFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -289,6 +285,10 @@ public class QuestionForm extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Boton que permite pasar a la vista para elegir etiquetas.
+     * @param evt 
+     */
     private void continueBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_continueBtnActionPerformed
         if(addLabelsCheckBtn.isSelected()){
             
@@ -317,21 +317,33 @@ public class QuestionForm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_continueBtnActionPerformed
 
+    /**
+     * Boton para devolverse a ver los campos de la pregunta a realizar.
+     * @param evt 
+     */
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         java.awt.CardLayout cl = (java.awt.CardLayout) formPanel.getLayout();
         cl.show(formPanel, "card1");
     }//GEN-LAST:event_backBtnActionPerformed
 
+
     private void addLabelsCheckBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLabelsCheckBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_addLabelsCheckBtnActionPerformed
 
+    /**
+     * Ejecuta la accion de volver al inicio de StartFrame una vez hecha la pregunta.
+     * @param evt 
+     */
     private void backToStartBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToStartBtnActionPerformed
         successDialog.dispose();
         this.dispose();
     }//GEN-LAST:event_backToStartBtnActionPerformed
        
-    
+    /**
+     * Realiza
+     * @param evt 
+     */
     private void postBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postBtnActionPerformed
         
         for(Component c : labelsContainer.getComponents()){
@@ -349,14 +361,27 @@ public class QuestionForm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_postBtnActionPerformed
 
+    /**
+     * metodo para volver al startFrame principal.
+     * @param evt 
+     */
     private void getBackBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getBackBtnActionPerformed
         this.dispose();
     }//GEN-LAST:event_getBackBtnActionPerformed
-    
+
+    /**
+     * Metodo para mostrar el contenido de una etiqueta
+     * @param evt
+     * @param btnSelected JRadioButton que fue seleccionado
+     */
     private void labelSelectedActionPerformed(java.awt.event.ActionEvent evt, JRadioButton btnSelected){
         labelDescriptionTxtArea.setText(stackController.getLabel(btnSelected.getText()).getDescription());
     }
     
+    
+    /**
+     * Metodo que realiza el llamado a stackController.ask()
+     */
     private void makeQuestion(){
         
         DefaultTableModel model = (DefaultTableModel) parent.getQuestionsTable().getModel();

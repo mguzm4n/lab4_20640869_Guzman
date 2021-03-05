@@ -307,11 +307,19 @@ public class QuestionView extends javax.swing.JDialog {
         answerForm.run();
     }//GEN-LAST:event_answerButtonActionPerformed
 
+    /** 
+     * Crea una nueva ventana para dar recompensa a la pregunta en cuestion.
+     * @param evt 
+     */
     private void rewardLblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rewardLblMouseClicked
         RewardQuestionForm rewardForm = new RewardQuestionForm(this, true, stackController);
         rewardForm.setVisible(true);
     }//GEN-LAST:event_rewardLblMouseClicked
     
+    /**
+     * Llena de respuestas la pregunta.
+     * @throws IOException 
+     */
     private void fillAnswersPanel() throws IOException{
         boolean makeBtn = stackController.getSessionType() &&
                           stackController.getOnlineUsername().equals(question.getAuthor()) && 
@@ -341,6 +349,9 @@ public class QuestionView extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * anadir las etiquetas, si existen, en la QuestionView
+     */
     private void addQuestionLabels(){
         java.awt.CardLayout cl = (java.awt.CardLayout) labelsPanel.getLayout();
         if(question.getLabels()!=null){
@@ -357,6 +368,9 @@ public class QuestionView extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Mapear los atributos que posee la pregunta con los objetos de Swing.
+     */
     private void setQuestionAttributes(){
         questionTitleLbl.setText(question.getTitle());
         questionContentText.setText(question.getContent());
@@ -365,6 +379,12 @@ public class QuestionView extends javax.swing.JDialog {
         rewardAmountLbl.setText(question.getReward()==0? "Sin recompensa" : Integer.toString(question.getReward()));
         questionStateLbl.setText(question.getState());
     }
+    
+    /**
+     * Accion que debe ejecutarse cuando se haga clic en el boton de acceptLbl
+     * @param evt
+     * @param ans La respuesta aceptada.
+     */
     private void acceptLblMouseClicked(MouseEvent evt, Model.Answer ans) throws IOException{
        int selectedOption = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea aceptar esta pregunta?");
        if(selectedOption == JOptionPane.YES_OPTION){
@@ -387,6 +407,10 @@ public class QuestionView extends javax.swing.JDialog {
        }
     }
     
+    /**
+     * Anadir la vista de los votos a la pregunta
+     * @throws IOException 
+     */
     private void addQuestionVotesView() throws IOException{
         votesContainerPanel.add(new VotesView(this, question), BorderLayout.PAGE_START);
         JPanel whiteSpacePanel = new JPanel();
@@ -394,6 +418,10 @@ public class QuestionView extends javax.swing.JDialog {
         votesContainerPanel.add(whiteSpacePanel, BorderLayout.PAGE_END);
     }
     
+    /**
+     * Anadir una nueva vista de respuesta al panel de respuestas
+     * @throws IOException 
+     */
     public void addNewAnswer() throws IOException{
         if(question.getAnswersCount()==1){
             CardLayout clAnswers = (CardLayout) answersSuperPanel.getLayout();
@@ -412,6 +440,9 @@ public class QuestionView extends javax.swing.JDialog {
         parent.getQuestionsTable().getModel().setValueAt(question.getAnswersCount(), question.getId() - 1, 2);
     }
 
+    /**
+     * inicializar la vista QuestionView segun los datos del usuario online
+     */
     public void run(){
         setLocationRelativeTo(null);
         CardLayout clOptions = (CardLayout) optionsPanel.getLayout(), clAnswers = (CardLayout) answersSuperPanel.getLayout();

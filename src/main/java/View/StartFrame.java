@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Forma inicial que se verá al iniciar el mismo programa. Extiende de JFrame.
  */
 package View;
 
@@ -293,6 +291,9 @@ public class StartFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Inicializa las tablas con todas las preguntas y la de las preguntas del usuario.
+     */
     private void initQuestionTables(){
         javax.swing.JTable tables[] = {questionsTable, userQuestionsTable};
         
@@ -314,16 +315,29 @@ public class StartFrame extends javax.swing.JFrame {
         }
        
     }
+    
+    /**
+     * Crea la ventana loginDialog y la hace visible.
+     * @param evt 
+     */
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         LoginDialog loginDialog = new LoginDialog(this, true);
         runJDialog(loginDialog);
     }//GEN-LAST:event_loginButtonActionPerformed
 
+    /**
+     * Crea una nueva ventana registerDialog y la hace visible.
+     * @param evt 
+     */
     private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         RegisterDialog registerDialog = new RegisterDialog(this, true, stackController);
         runJDialog(registerDialog);
     }//GEN-LAST:event_registerButtonActionPerformed
 
+    /**
+     * Termina la sesion activa y actualiza el JFrame actual.
+     * @param evt 
+     */
     private void logOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutBtnActionPerformed
         try {
             stackController.logOut();
@@ -338,6 +352,10 @@ public class StartFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_logOutBtnActionPerformed
 
+    /**
+     * Crea una nueva QuestionForm y la hace visible.
+     * @param evt 
+     */
     private void makeQuestionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeQuestionBtnActionPerformed
         QuestionForm questionForm = new QuestionForm(this, true);
         runJDialog(questionForm);
@@ -346,6 +364,10 @@ public class StartFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_makeQuestionBtnActionPerformed
 
+        /**
+         * Rellena la tabla de las preguntas que posee el usuario.
+         * @param evt 
+         */
     private void userQuestionsBtnItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_userQuestionsBtnItemStateChanged
         java.awt.CardLayout cl = (java.awt.CardLayout) container2.getLayout();
         int estado = evt.getStateChange();
@@ -376,14 +398,19 @@ public class StartFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_userQuestionsBtnItemStateChanged
 
-    
+    /**
+     * Metodo que hace correr (visible) a un JDialog ya creado.
+     * @param dialog 
+     */
     public void runJDialog(javax.swing.JDialog dialog){
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
     
 
-    
+    /**
+     * Metodo que hace visible la ventana, o sea, StartFrame.
+     */
     public void run() {
        setTitle("StackOverflow");
         

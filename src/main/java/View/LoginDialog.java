@@ -192,7 +192,9 @@ public class LoginDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_loginBtnActionPerformed
 
-        
+    /**
+     * Efectua el llamado al metodo stackController.login() 
+     */
     private void loginAction() throws IncorrectPasswException, InexistentUserException, NoPasswordEnteredException, NoUsernameEnteredException{
         if(stackController.login(usernameField.getText(), passwField.getPassword())){
             JPanel container1 = parentFrame.getContainer1();
